@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SNSSearcher</string>
+    <string name="facebook_app_id">192683567962931</string>
+    <string name="fb_login_protocol_scheme">fb192683567962931</string>
 </resources>
