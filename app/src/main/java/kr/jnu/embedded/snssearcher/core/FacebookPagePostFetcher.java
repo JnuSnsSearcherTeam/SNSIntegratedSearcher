@@ -129,6 +129,7 @@ public class FacebookPagePostFetcher {
             @Override
             public void onBatchCompleted(GraphRequestBatch batch) {
                 Log.d(TAG, "Page IDs: " + getPageArray());
+                getPageInfo();
                 getFeedsFromPageArray();
             }
         });
@@ -155,7 +156,7 @@ public class FacebookPagePostFetcher {
     private void getPageInfo(){
         GraphRequestBatch batch = new GraphRequestBatch();
         for(String pid : pageArray){
-            GraphRequest.newGraphPathRequest(
+            batch.add(GraphRequest.newGraphPathRequest(
                     accessToken,
                     pid + "?fields=name,picture"
                     , new GraphRequest.Callback() {
@@ -168,8 +169,7 @@ public class FacebookPagePostFetcher {
                             Log.d(TAG,"Page Info : " + response.getJSONObject());
                             pages.add(response.getJSONObject());
                         }
-                    }
-            );
+                    }));
         }
         batch.executeAsync();
     }

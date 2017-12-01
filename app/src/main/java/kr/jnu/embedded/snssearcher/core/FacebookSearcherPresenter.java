@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Picture;
 import android.media.Image;
+import android.util.Log;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -44,18 +45,19 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
 
     @Override
     public void loadItem(final SNSSearcherContract.LoadCompleteListner listener) {
-        final ArrayList<FacebookPagePost> result = new ArrayList<>();
-
         FacebookPagePostFetcher facebookPagePostFetcher = new FacebookPagePostFetcher(accessToken
                 , new FacebookPagePostFetcher.OnCompleteListener() {
             @Override
             public void onComplete(ArrayList<JSONObject> pages, ArrayList<JSONObject> postArray) {
+                Log.d(TAG, "Page Post Fetch completed.");
                 parsePages(pages, postArray);
+                Log.d(TAG, "Fetched Posts: " + posts.toString());
                 listener.onComplete(posts);
             }
         });
 
         facebookPagePostFetcher.start();
+        Log.d(TAG, "Page Post Fetch started.");
     }
 
     public void parsePages(ArrayList<JSONObject> pageInfo, ArrayList<JSONObject> fetchedPageResult){
