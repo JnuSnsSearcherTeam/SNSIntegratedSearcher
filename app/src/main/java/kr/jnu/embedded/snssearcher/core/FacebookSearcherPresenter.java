@@ -1,25 +1,9 @@
 package kr.jnu.embedded.snssearcher.core;
 
-import android.graphics.pdf.PdfDocument;
-import android.os.Bundle;
-import android.util.Log;
-
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
-import com.facebook.GraphRequest;
-import com.facebook.GraphRequestBatch;
-import com.facebook.GraphResponse;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.StringReader;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.Callable;
 
 import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
@@ -42,7 +26,7 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
 
     @Override
     public void loadItem(final SNSSearcherContract.LoadCompleteListner listener) {
-        final ArrayList<FacebookPagePost>result = new ArrayList<>();
+        final ArrayList<FacebookPagePost> result = new ArrayList<>();
 
         FacebookPagePostFetcher facebookPagePostFetcher
                 = new FacebookPagePostFetcher(accessToken, result);
