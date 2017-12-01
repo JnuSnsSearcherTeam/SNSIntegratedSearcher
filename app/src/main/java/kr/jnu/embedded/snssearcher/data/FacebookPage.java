@@ -14,4 +14,12 @@ public class FacebookPage {
         IconUrl = iconUrl;
         Name = name;
     }
+
+    public String getName() {
+        return Name;
+    }
+
+    public Bitmap getIcon() {
+        return Icon;
+    }
 }
