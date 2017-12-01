@@ -23,12 +23,12 @@ import java.util.ArrayList;
 public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter {
     public static final String TAG = "FacebookSearcher";
 
-    CallbackManager mCallbackManager;
-    AccessTokenTracker accessTokenTracker;
-    AccessToken accessToken;
-    SNSSearcherContract.View view;
-    ArrayList<JSONObject> idArray = new ArrayList<>();
-    ArrayList<String> pageArray = new ArrayList<>();
+    private AccessToken accessToken;
+
+    private SNSSearcherContract.View view;
+    private ArrayList<JSONObject> idArray = new ArrayList<>();
+    private ArrayList<String> pageArray = new ArrayList<>();
+    private ArrayList<JSONObject> resultArray = new ArrayList<>();
 
     @Override
     public void setView(SNSSearcherContract.View view) {
@@ -41,13 +41,17 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
     }
 
     public FacebookSearcherPresenter() {
+        CallbackManager mCallbackManager;
+        AccessTokenTracker accessTokenTracker;
+
         mCallbackManager = CallbackManager.Factory.create();
-        accessTokenTracker = new AccessTokenTracker(){
+        accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-
+                accessToken = currentAccessToken;
             }
         };
+        accessTokenTracker.startTracking();
         accessToken = AccessToken.getCurrentAccessToken();
     }
 
@@ -64,7 +68,7 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
                         if(response.getError() != null) Log.d(TAG, response.getError().toString());
                         if(object == null) return;
 
-                        Log.d(TAG, "GetMe Result:" + object.toString());
+                        Log.d(TAG, "Friend list:" + object.toString());
                         addFacebookId(object);
                     }
                 });
@@ -133,7 +137,24 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
             }
         });
         batch.executeAsync();
+    }
+    private void getFeedsFromPageArray(){
+        StringBuffer pages = new StringBuffer();
+        for(String id : pageArray){
+            pages.append(id + ",");
+        }
 
+        GraphRequest request = GraphRequest.newGraphPathRequest(
+                accessToken,
+                "feed/" + pages
+                , new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse response) {
+                        if(response.getError() != null) Log.d(TAG, "id likes error:" + response.getError());
+                        addPage(response.getJSONObject());
+                    }
+                }
+        );
     }
 
     public void getMe(final SNSSearcherContract.LoadCompleteListner listener) {
