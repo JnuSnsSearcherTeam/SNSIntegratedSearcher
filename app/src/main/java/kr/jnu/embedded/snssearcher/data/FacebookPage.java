@@ -28,4 +28,13 @@ public class FacebookPage {
     public Bitmap getIcon() {
         return Icon;
     }
+
+    @Override
+    public String toString() {
+        return "FacebookPage{" +
+                "IconUrl='" + IconUrl + '\'' +
+                ", Name='" + Name + '\'' +
+                ", ID='" + ID + '\'' +
+                '}';
+    }
 }
