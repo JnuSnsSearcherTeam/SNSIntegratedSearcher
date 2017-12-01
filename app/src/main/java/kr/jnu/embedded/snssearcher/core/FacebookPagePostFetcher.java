@@ -15,6 +15,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
+import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
+
 /**
  * Created by KANG on 2017-12-01.
  */
@@ -26,13 +28,13 @@ public class FacebookPagePostFetcher {
 
     private ArrayList<JSONObject> idArray = new ArrayList<>();
     private ArrayList<String> pageArray = new ArrayList<>();
-    private ArrayList<JSONObject> resultArray;
+    private ArrayList<FacebookPagePost> resultArray;
 
 
     private boolean isRequestAllSent;
     private int requestId = 0;
 
-    public FacebookPagePostFetcher(AccessToken accessToken, ArrayList<JSONObject> resultArray) {
+    public FacebookPagePostFetcher(AccessToken accessToken, ArrayList<FacebookPagePost> resultArray) {
         this.accessToken = accessToken;
         this.resultArray = resultArray;
     }

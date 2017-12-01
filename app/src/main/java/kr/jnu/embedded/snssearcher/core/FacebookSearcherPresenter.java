@@ -22,6 +22,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
+
 /**
  * Created by KANG on 2017-11-22.
  */
@@ -40,7 +42,7 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
 
     @Override
     public void loadItem(final SNSSearcherContract.LoadCompleteListner listener) {
-        final ArrayList<JSONObject> result = new ArrayList<>();
+        final ArrayList<FacebookPagePost>result = new ArrayList<>();
 
         FacebookPagePostFetcher facebookPagePostFetcher
                 = new FacebookPagePostFetcher(accessToken, result);
