@@ -30,13 +30,12 @@ import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
 
 public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter {
     public static final String TAG = "FacebookSearcher";
-    public String keyword;
+    FacebookPostSearcher facebookPostSearcher;
+
     private AccessToken accessToken;
 
     private SNSSearcherContract.View view;
 
-    ArrayList<FacebookPage> pages = new ArrayList<>();
-    ArrayList<FacebookPagePost> posts = new ArrayList<>();
 
     public FacebookSearcherPresenter() {
         AccessTokenTracker accessTokenTracker;
@@ -49,8 +48,6 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
         };
         accessTokenTracker.startTracking();
         accessToken = AccessToken.getCurrentAccessToken();
-
-        setKeyword("안녕하세요.");
     }
 
     @Override
@@ -58,68 +55,24 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
         this.view = view;
     }
 
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
-    }
-
     @Override
     public void loadItem(final SNSSearcherContract.LoadCompleteListner listener) {
+        fetchProcess();
+
+    }
+    public void fetchProcess(){
         FacebookPagePostFetcher facebookPagePostFetcher = new FacebookPagePostFetcher(accessToken
                 , new FacebookPagePostFetcher.OnCompleteListener() {
             @Override
             public void onComplete(ArrayList<JSONObject> pages, ArrayList<JSONObject> postArray) {
-                parsePages(pages, postArray);
-                searchString(keyword);
-                listener.onComplete(posts);
+                facebookPostSearcher = new FacebookPostSearcher("안녕하세요.");
+                facebookPostSearcher.setParameters(pages, postArray);
+                Log.d(TAG, facebookPostSearcher.getPages().toString());
+                Log.d(TAG, facebookPostSearcher.getPosts().toString());
             }
         });
 
         facebookPagePostFetcher.start();
         Log.d(TAG, "Page Post Fetch started.");
-    }
-
-    public void parsePages(ArrayList<JSONObject> pageInfo, ArrayList<JSONObject> fetchedPageResult){
-        try {
-            for(JSONObject page : pageInfo) {
-                    String name = page.getString("name");
-                    String id = page.getString("id");
-                    String picture = page.getJSONObject("picture").getJSONObject("data").getString("url");
-                    pages.add(new FacebookPage(id, picture, name));
-            }
-
-            for(JSONObject object : fetchedPageResult) {
-                Log.d(TAG, "Page Object: " + object);
-                for (Iterator<String> itr = object.keys(); itr.hasNext(); ){
-                    String key = (String)itr.next();
-                    JSONObject item = (JSONObject) object.get(key);
-                    JSONArray data = item.getJSONArray("data");
-                    FacebookPage facebookPage = findPagebyId(key, pages);
-                    if(facebookPage == null) continue;
-
-                    for(int i=0; i<data.length(); i++){
-                        String message = data.getString(i);
-                        posts.add(new FacebookPagePost(facebookPage, message));
-                    }
-                }
-            }
-        } catch(JSONException je){
-            je.printStackTrace();
-        }
-    }
-
-    private FacebookPage findPagebyId(String key, ArrayList<FacebookPage> pages){
-        for(FacebookPage page : pages){
-            if(page.getID().equals(key)) return page;
-        }
-        return null;
-    }
-
-    private void searchString(String keyword){
-        ArrayList<FacebookPagePost> toRemove = new ArrayList<>();
-        for(FacebookPagePost post : posts){
-            if(!post.getMessage().contains(keyword))
-                toRemove.add(post);
-        }
-        posts.removeAll(toRemove);
     }
 }
