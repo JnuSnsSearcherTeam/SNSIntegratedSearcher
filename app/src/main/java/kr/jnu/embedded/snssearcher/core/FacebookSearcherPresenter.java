@@ -46,9 +46,10 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
     public void loadItem(final SNSSearcherContract.LoadCompleteListner listener) {
         final ArrayList<FacebookPagePost> result = new ArrayList<>();
 
-        FacebookPagePostFetcher facebookPagePostFetcher = new FacebookPagePostFetcher(accessToken, new FacebookPagePostFetcher.OnCompleteListener() {
+        FacebookPagePostFetcher facebookPagePostFetcher = new FacebookPagePostFetcher(accessToken
+                , new FacebookPagePostFetcher.OnCompleteListener() {
             @Override
-            public void onComplete(JSONObject pages, ArrayList<JSONObject> postArray) {
+            public void onComplete(ArrayList<JSONObject> pages, ArrayList<JSONObject> postArray) {
                 parsePages(pages, postArray);
                 listener.onComplete(posts);
             }
@@ -57,9 +58,9 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
         facebookPagePostFetcher.start();
     }
 
-    public void parsePages(JSONObject pageInfo, ArrayList<JSONObject> fetchedPageResult){
+    public void parsePages(ArrayList<JSONObject> pageInfo, ArrayList<JSONObject> fetchedPageResult){
         try {
-            String PageID;
+            for(JSONObject page : )
             JSONArray pageInfoData = pageInfo.getJSONArray("data");
             for(int i=0; i<pageInfoData.length();i++){
                 JSONObject info = pageInfoData.getJSONObject(i);
