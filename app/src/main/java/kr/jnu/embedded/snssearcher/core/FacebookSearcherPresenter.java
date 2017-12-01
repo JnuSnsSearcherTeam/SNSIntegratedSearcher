@@ -30,7 +30,7 @@ import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
 
 public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter {
     public static final String TAG = "FacebookSearcher";
-
+    public String keyword;
     private AccessToken accessToken;
 
     private SNSSearcherContract.View view;
@@ -38,9 +38,28 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
     ArrayList<FacebookPage> pages = new ArrayList<>();
     ArrayList<FacebookPagePost> posts = new ArrayList<>();
 
+    public FacebookSearcherPresenter() {
+        AccessTokenTracker accessTokenTracker;
+
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                accessToken = currentAccessToken;
+            }
+        };
+        accessTokenTracker.startTracking();
+        accessToken = AccessToken.getCurrentAccessToken();
+
+        setKeyword("안녕하세요.");
+    }
+
     @Override
     public void setView(SNSSearcherContract.View view) {
         this.view = view;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     @Override
@@ -49,12 +68,8 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
                 , new FacebookPagePostFetcher.OnCompleteListener() {
             @Override
             public void onComplete(ArrayList<JSONObject> pages, ArrayList<JSONObject> postArray) {
-                Log.d(TAG, "Page Post Fetch completed.");
-                Log.d(TAG, "Fetched Pages: " + pages.toString());
-                Log.d(TAG, "Fetched Posts: " + postArray.toString());
                 parsePages(pages, postArray);
-
-                Log.d(TAG, "Result Posts: " + posts.toString());
+                searchString(keyword);
                 listener.onComplete(posts);
             }
         });
@@ -70,7 +85,6 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
                     String id = page.getString("id");
                     String picture = page.getJSONObject("picture").getJSONObject("data").getString("url");
                     pages.add(new FacebookPage(id, picture, name));
-
             }
 
             for(JSONObject object : fetchedPageResult) {
@@ -79,9 +93,8 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
                     String key = (String)itr.next();
                     JSONObject item = (JSONObject) object.get(key);
                     JSONArray data = item.getJSONArray("data");
-                    Log.d(TAG, "ITEM:" + item);
-                    Log.d(TAG, "DATA:" + data);
                     FacebookPage facebookPage = findPagebyId(key, pages);
+                    if(facebookPage == null) continue;
 
                     for(int i=0; i<data.length(); i++){
                         String message = data.getString(i);
@@ -92,8 +105,8 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
         } catch(JSONException je){
             je.printStackTrace();
         }
-
     }
+
     private FacebookPage findPagebyId(String key, ArrayList<FacebookPage> pages){
         for(FacebookPage page : pages){
             if(page.getID().equals(key)) return page;
@@ -101,21 +114,12 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
         return null;
     }
 
-
-    public FacebookSearcherPresenter() {
-        CallbackManager mCallbackManager;
-        AccessTokenTracker accessTokenTracker;
-
-        mCallbackManager = CallbackManager.Factory.create();
-        accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-                accessToken = currentAccessToken;
-            }
-        };
-        accessTokenTracker.startTracking();
-        accessToken = AccessToken.getCurrentAccessToken();
+    private void searchString(String keyword){
+        ArrayList<FacebookPagePost> toRemove = new ArrayList<>();
+        for(FacebookPagePost post : posts){
+            if(!post.getMessage().contains(keyword))
+                toRemove.add(post);
+        }
+        posts.removeAll(toRemove);
     }
-
-
 }
