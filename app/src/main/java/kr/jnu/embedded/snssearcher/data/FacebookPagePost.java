@@ -7,13 +7,11 @@ import android.media.Image;
  */
 
 public class FacebookPagePost {
-    Image icon;
-    String name;
+    FacebookPage page;
     String message;
 
-    public FacebookPagePost(Image icon, String name, String message) {
-        this.icon = icon;
-        this.name = name;
+    public FacebookPagePost(FacebookPage page, String message) {
+        this.page = page;
         this.message = message;
     }
 }
