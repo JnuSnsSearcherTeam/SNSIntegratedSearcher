@@ -50,8 +50,11 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
             @Override
             public void onComplete(ArrayList<JSONObject> pages, ArrayList<JSONObject> postArray) {
                 Log.d(TAG, "Page Post Fetch completed.");
+                Log.d(TAG, "Fetched Pages: " + pages.toString());
+                Log.d(TAG, "Fetched Posts: " + postArray.toString());
                 parsePages(pages, postArray);
-                Log.d(TAG, "Fetched Posts: " + posts.toString());
+
+                Log.d(TAG, "Result Posts: " + posts.toString());
                 listener.onComplete(posts);
             }
         });
@@ -63,7 +66,6 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
     public void parsePages(ArrayList<JSONObject> pageInfo, ArrayList<JSONObject> fetchedPageResult){
         try {
             for(JSONObject page : pageInfo) {
-
                     String name = page.getString("name");
                     String id = page.getString("id");
                     String picture = page.getJSONObject("picture").getJSONObject("data").getString("url");
@@ -72,10 +74,13 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
             }
 
             for(JSONObject object : fetchedPageResult) {
-                for (Iterator<String> itr = object.keys(); !itr.hasNext(); ){
+                Log.d(TAG, "Page Object: " + object);
+                for (Iterator<String> itr = object.keys(); itr.hasNext(); ){
                     String key = (String)itr.next();
                     JSONObject item = (JSONObject) object.get(key);
                     JSONArray data = item.getJSONArray("data");
+                    Log.d(TAG, "ITEM:" + item);
+                    Log.d(TAG, "DATA:" + data);
                     FacebookPage facebookPage = findPagebyId(key, pages);
 
                     for(int i=0; i<data.length(); i++){
