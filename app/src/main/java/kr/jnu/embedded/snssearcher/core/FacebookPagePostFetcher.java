@@ -97,7 +97,7 @@ public class FacebookPagePostFetcher {
                 }
         );
         Bundle likeParameters = new Bundle();
-        likeParameters.putString("fields", "likes{id}");
+        likeParameters.putString("fields", "likes{id, name, picture}");
         userRequest.setParameters(likeParameters);
         requests.add(userRequest);
 
