@@ -28,7 +28,7 @@ public class FacebookPagePostFetcher {
     private ArrayList<JSONObject> idArray = new ArrayList<>();
     private ArrayList<String> pageArray = new ArrayList<>();
     private ArrayList<JSONObject> postArray = new ArrayList<>();
-    private JSONObject pages;
+    private ArrayList<JSONObject> pages = new ArrayList<>();
 
     private OnCompleteListener listener;
 
@@ -36,7 +36,7 @@ public class FacebookPagePostFetcher {
     private int requestId = 0;
 
     public interface OnCompleteListener{
-        void onComplete(JSONObject pages, ArrayList<JSONObject> postArray);
+        void onComplete(ArrayList<JSONObject> pages, ArrayList<JSONObject> postArray);
     }
 
     public FacebookPagePostFetcher(AccessToken accessToken, OnCompleteListener listener) {
@@ -150,6 +150,28 @@ public class FacebookPagePostFetcher {
             }
         }
         isRequestAllSent = true;
+    }
+
+    private void getPageInfo(){
+        GraphRequestBatch batch = new GraphRequestBatch();
+        for(String pid : pageArray){
+            GraphRequest.newGraphPathRequest(
+                    accessToken,
+                    pid + "?fields=name,picture"
+                    , new GraphRequest.Callback() {
+                        @Override
+                        public void onCompleted(GraphResponse response) {
+                            if(response.getError() != null) {
+                                Log.d(TAG, "[getPageInfo] Error occured : " + response.getError());
+                                return;
+                            }
+                            Log.d(TAG,"Page Info : " + response.getJSONObject());
+                            pages.add(response.getJSONObject());
+                        }
+                    }
+            );
+        }
+        batch.executeAsync();
     }
 
     private void sendPageFeedRequest(final int requestId, String pids){
