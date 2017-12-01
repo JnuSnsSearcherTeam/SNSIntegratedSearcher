@@ -28,19 +28,20 @@ public class FacebookPagePostFetcher {
 
     private ArrayList<JSONObject> idArray = new ArrayList<>();
     private ArrayList<String> pageArray = new ArrayList<>();
-    private ArrayList<FacebookPagePost> resultArray;
+    private JSONObject pages;
 
+    private OnCompleteListener listener;
 
     private boolean isRequestAllSent;
     private int requestId = 0;
 
-    public FacebookPagePostFetcher(AccessToken accessToken, ArrayList<FacebookPagePost> resultArray) {
-        this.accessToken = accessToken;
-        this.resultArray = resultArray;
+    public interface OnCompleteListener{
+        void onComplete(JSONObject pages, ArrayList<JSONObject> postArray);
     }
 
-    public void onResult(Callable callable){
-        this.onFetchComplete = callable;
+    public FacebookPagePostFetcher(AccessToken accessToken, OnCompleteListener listener) {
+        this.accessToken = accessToken;
+        this.listener = listener;
     }
 
     public void start(){
