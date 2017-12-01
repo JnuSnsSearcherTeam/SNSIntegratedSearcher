@@ -1,5 +1,6 @@
 package kr.jnu.embedded.snssearcher.core;
 
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -14,7 +15,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by KANG on 2017-11-22.
@@ -54,6 +57,7 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
         accessTokenTracker.startTracking();
         accessToken = AccessToken.getCurrentAccessToken();
     }
+
 
     private void startGetPageCandidates(final SNSSearcherContract.LoadCompleteListner listener){
         Log.d(TAG,"Access Token : " + accessToken);
@@ -134,27 +138,41 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
             @Override
             public void onBatchCompleted(GraphRequestBatch batch) {
                 Log.d(TAG, "Page IDs: " + getPageArray());
+                getFeedsFromPageArray(listener);
             }
         });
         batch.executeAsync();
     }
-    private void getFeedsFromPageArray(){
+    private void getFeedsFromPageArray(final SNSSearcherContract.LoadCompleteListner listener){
         StringBuffer pages = new StringBuffer();
+        int count = 0;
         for(String id : pageArray){
-            pages.append(id + ",");
+            while(count < 5 && !pageArray.isEmpty())
+                pages.append(id).append(',');
+            pages.deleteCharAt(pages.length()-1);
+            sendPageFeedRequest(pages.toString(), listener);
+            pages.delete(0, pages.length());
         }
+    }
 
+    private void sendPageFeedRequest(String pids, final SNSSearcherContract.LoadCompleteListner listener){
         GraphRequest request = GraphRequest.newGraphPathRequest(
                 accessToken,
-                "feed/" + pages
+                "feed?ids=" + pids
                 , new GraphRequest.Callback() {
                     @Override
                     public void onCompleted(GraphResponse response) {
                         if(response.getError() != null) Log.d(TAG, "id likes error:" + response.getError());
                         addPage(response.getJSONObject());
+                        Log.d(TAG, "Pages : ");
                     }
                 }
         );
+        Log.d(TAG,"Graph Path :"+ request.getGraphPath());
+        Log.d(TAG,"HTTP Method :"+ request.getHttpMethod());
+
+        request.executeAsync();
+
     }
 
     public void getMe(final SNSSearcherContract.LoadCompleteListner listener) {
