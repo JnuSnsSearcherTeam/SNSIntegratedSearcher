@@ -20,9 +20,9 @@ import java.util.concurrent.Callable;
  */
 
 public class FacebookPagePostFetcher {
-    public static final String TAG = "FacebookPostFetcher";
-    AccessToken accessToken;
-    Callable onFetchComplete;
+    private static final String TAG = "FacebookPostFetcher";
+    private AccessToken accessToken;
+    private Callable onFetchComplete;
 
     private ArrayList<JSONObject> idArray = new ArrayList<>();
     private ArrayList<String> pageArray = new ArrayList<>();
@@ -36,6 +36,7 @@ public class FacebookPagePostFetcher {
         this.accessToken = accessToken;
         this.resultArray = resultArray;
     }
+
     public void onResult(Callable callable){
         this.onFetchComplete = callable;
     }
@@ -74,7 +75,6 @@ public class FacebookPagePostFetcher {
         });
         batch.executeAsync();
     }
-
 
     private void getPageIdFromLikes(){
         ArrayList<GraphRequest> requests = new ArrayList<>();
@@ -151,7 +151,7 @@ public class FacebookPagePostFetcher {
     private void sendPageFeedRequest(final int requestId, String pids){
         GraphRequest request = GraphRequest.newGraphPathRequest(
                 accessToken,
-                "feed?limit=5&ids=" + pids
+                "feed?limit=5&field=message&ids=" + pids
                 , new GraphRequest.Callback() {
                     @Override
                     public void onCompleted(GraphResponse response) {
@@ -174,15 +174,15 @@ public class FacebookPagePostFetcher {
         request.executeAsync();
     }
 
-    public int getRequestId() {
+    private int getRequestId() {
         return requestId;
     }
 
-    public boolean isRequestAllSent() {
+    private boolean isRequestAllSent() {
         return isRequestAllSent;
     }
 
-    public void addFacebookId(JSONObject object){
+    private void addFacebookId(JSONObject object){
         this.idArray.add(object);
     }
 
@@ -197,15 +197,15 @@ public class FacebookPagePostFetcher {
         }
     }
 
-    public ArrayList<JSONObject> getFacebookIdArray(){
+    private ArrayList<JSONObject> getFacebookIdArray(){
         return this.idArray;
     }
 
-    public ArrayList<String> getPageArray() {
+    private ArrayList<String> getPageArray() {
         return pageArray;
     }
 
-    public void addPage(JSONObject object) {
+    private void addPage(JSONObject object) {
         try {
             this.pageArray.add(object.getString("id"));
         } catch (JSONException e){
@@ -213,7 +213,7 @@ public class FacebookPagePostFetcher {
         }
     }
 
-    public void addPage(JSONArray objects) {
+    private void addPage(JSONArray objects) {
         try {
             for(int i=0; i < objects.length(); i++) {
                 addPage(objects.getJSONObject(i));
