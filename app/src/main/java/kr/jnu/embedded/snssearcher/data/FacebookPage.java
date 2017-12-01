@@ -6,11 +6,12 @@ import android.graphics.Bitmap;
  */
 
 public class FacebookPage {
-    Bitmap icon;
-    String name;
+    String IconUrl;
+    String Name;
+    Bitmap Icon;
 
-    public FacebookPage(Bitmap icon, String name) {
-        this.icon = icon;
-        this.name = name;
+    public FacebookPage(String iconUrl, String name) {
+        IconUrl = iconUrl;
+        Name = name;
     }
 }
