@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.jnu.embedded.snssearcher.R;
+import kr.jnu.embedded.snssearcher.ui.fragments.FaceBookFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new FaceBookFragment(), "ONE");
-        adapter.addFragment(new FaceBookFragment(), "TWO");
-        adapter.addFragment(new FaceBookFragment(), "THREE");
+        adapter.addFragment(new FaceBookFragment(), "Facebook");
+        adapter.addFragment(new FaceBookFragment(), "Twitter");
+        adapter.addFragment(new FaceBookFragment(), "Instagram");
         viewPager.setAdapter(adapter);
     }
 
