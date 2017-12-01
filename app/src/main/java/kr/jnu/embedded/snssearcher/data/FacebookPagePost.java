@@ -10,4 +10,10 @@ public class FacebookPagePost {
     Image icon;
     String name;
     String message;
+
+    public FacebookPagePost(Image icon, String name, String message) {
+        this.icon = icon;
+        this.name = name;
+        this.message = message;
+    }
 }
