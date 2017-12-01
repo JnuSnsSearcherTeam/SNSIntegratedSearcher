@@ -60,14 +60,13 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
 
     public void parsePages(ArrayList<JSONObject> pageInfo, ArrayList<JSONObject> fetchedPageResult){
         try {
-            for(JSONObject page : )
-            JSONArray pageInfoData = pageInfo.getJSONArray("data");
-            for(int i=0; i<pageInfoData.length();i++){
-                JSONObject info = pageInfoData.getJSONObject(i);
-                String name = info.getString("name");
-                String id= info.getString("id");
-                String picture = info.getJSONObject("pricture").getJSONObject("data").getString("url");
-                pages.add(new FacebookPage(id, picture, name));
+            for(JSONObject page : pageInfo) {
+
+                    String name = page.getString("name");
+                    String id = page.getString("id");
+                    String picture = page.getJSONObject("picture").getJSONObject("data").getString("url");
+                    pages.add(new FacebookPage(id, picture, name));
+
             }
 
             for(JSONObject object : fetchedPageResult) {
