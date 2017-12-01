@@ -8,10 +8,33 @@ import android.graphics.Bitmap;
 public class FacebookPage {
     String IconUrl;
     String Name;
+    String ID;
     Bitmap Icon;
 
-    public FacebookPage(String iconUrl, String name) {
+    public FacebookPage(String id, String iconUrl, String name) {
+        ID = id;
         IconUrl = iconUrl;
         Name = name;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public Bitmap getIcon() {
+        return Icon;
+    }
+
+    @Override
+    public String toString() {
+        return "FacebookPage{" +
+                "IconUrl='" + IconUrl + '\'' +
+                ", Name='" + Name + '\'' +
+                ", ID='" + ID + '\'' +
+                '}';
     }
 }

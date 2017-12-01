@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Picture;
 import android.media.Image;
+import android.util.Log;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -17,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.Callable;
 
 import kr.jnu.embedded.snssearcher.data.FacebookPage;
@@ -33,6 +35,9 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
 
     private SNSSearcherContract.View view;
 
+    ArrayList<FacebookPage> pages = new ArrayList<>();
+    ArrayList<FacebookPagePost> posts = new ArrayList<>();
+
     @Override
     public void setView(SNSSearcherContract.View view) {
         this.view = view;
@@ -40,45 +45,55 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
 
     @Override
     public void loadItem(final SNSSearcherContract.LoadCompleteListner listener) {
-        final ArrayList<FacebookPagePost> result = new ArrayList<>();
-
-        FacebookPagePostFetcher facebookPagePostFetcher
-                = new FacebookPagePostFetcher(accessToken, result);
-
-        facebookPagePostFetcher.onResult(new Callable() {
+        FacebookPagePostFetcher facebookPagePostFetcher = new FacebookPagePostFetcher(accessToken
+                , new FacebookPagePostFetcher.OnCompleteListener() {
             @Override
-            public Object call() throws Exception {
-                listener.onComplete(result);
-                return true;
+            public void onComplete(ArrayList<JSONObject> pages, ArrayList<JSONObject> postArray) {
+                Log.d(TAG, "Page Post Fetch completed.");
+                parsePages(pages, postArray);
+                Log.d(TAG, "Fetched Posts: " + posts.toString());
+                listener.onComplete(posts);
             }
         });
 
         facebookPagePostFetcher.start();
+        Log.d(TAG, "Page Post Fetch started.");
     }
 
-    public void parsePages(JSONObject pageInfo, JSONObject fetchedPageResult){
+    public void parsePages(ArrayList<JSONObject> pageInfo, ArrayList<JSONObject> fetchedPageResult){
         try {
-            ArrayList<FacebookPage> pages;
-            ArrayList<FacebookPagePost> posts;
+            for(JSONObject page : pageInfo) {
 
-            String PageID;
-            JSONArray pageInfoData = pageInfo.getJSONArray("data");
-            for(int i=0; i<pageInfoData.length();i++){
-                JSONObject info = pageInfoData.getJSONObject(i);
-                String name = info.getString("name");
-                String picture = info.getJSONObject("pricture").getJSONObject("data").getString("url");
+                    String name = page.getString("name");
+                    String id = page.getString("id");
+                    String picture = page.getJSONObject("picture").getJSONObject("data").getString("url");
+                    pages.add(new FacebookPage(id, picture, name));
 
-                FacebookPage page = new FacebookPage(picture, name);
             }
 
-            Image icon;
-            String name;
-            String message;
+            for(JSONObject object : fetchedPageResult) {
+                for (Iterator<String> itr = object.keys(); !itr.hasNext(); ){
+                    String key = (String)itr.next();
+                    JSONObject item = (JSONObject) object.get(key);
+                    JSONArray data = item.getJSONArray("data");
+                    FacebookPage facebookPage = findPagebyId(key, pages);
 
+                    for(int i=0; i<data.length(); i++){
+                        String message = data.getString(i);
+                        posts.add(new FacebookPagePost(facebookPage, message));
+                    }
+                }
+            }
         } catch(JSONException je){
             je.printStackTrace();
         }
 
+    }
+    private FacebookPage findPagebyId(String key, ArrayList<FacebookPage> pages){
+        for(FacebookPage page : pages){
+            if(page.getID().equals(key)) return page;
+        }
+        return null;
     }
 
 
