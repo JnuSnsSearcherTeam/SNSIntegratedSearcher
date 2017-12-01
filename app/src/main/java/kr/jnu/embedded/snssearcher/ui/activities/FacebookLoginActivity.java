@@ -19,11 +19,13 @@ import com.facebook.login.widget.LoginButton;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kr.jnu.embedded.snssearcher.R;
 import kr.jnu.embedded.snssearcher.core.FacebookSearcherPresenter;
 import kr.jnu.embedded.snssearcher.core.SNSSearcherContract;
+import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
 
 public class FacebookLoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
@@ -92,7 +94,7 @@ public class FacebookLoginActivity extends AppCompatActivity {
         public void updateItem() {
             presenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
                 @Override
-                public void onComplete(List<JSONObject> result) {
+                public void onComplete(ArrayList<FacebookPagePost> result) {
                     textView.setText(result.toString());
                 }
             });

@@ -2,7 +2,9 @@ package kr.jnu.embedded.snssearcher.core;
 
 import org.json.JSONObject;
 
-import java.util.List;
+import java.util.ArrayList;
+
+import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
 
 /**
  * Created by KANG on 2017-11-22.
@@ -21,6 +23,6 @@ public interface SNSSearcherContract {
     }
 
     public interface LoadCompleteListner{
-        void onComplete(List<JSONObject> result);
+        void onComplete(ArrayList<FacebookPagePost> result);
     }
 }
