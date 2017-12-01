@@ -33,6 +33,9 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
     private ArrayList<String> pageArray = new ArrayList<>();
     private ArrayList<JSONObject> resultArray = new ArrayList<>();
 
+    private boolean isRequestAllSent;
+    private int requestId = 0;
+
     @Override
     public void setView(SNSSearcherContract.View view) {
         this.view = view;
@@ -146,25 +149,42 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
     private void getFeedsFromPageArray(final SNSSearcherContract.LoadCompleteListner listener){
         StringBuffer pages = new StringBuffer();
         int count = 0;
+
         for(String id : pageArray){
-            while(count < 5 && !pageArray.isEmpty())
-                pages.append(id).append(',');
-            pages.deleteCharAt(pages.length()-1);
-            sendPageFeedRequest(pages.toString(), listener);
-            pages.delete(0, pages.length());
+            pages.append(id).append(',');
+            count++;
+            if(pageArray.isEmpty() || count > 5){
+                pages.deleteCharAt(pages.length() - 1);
+                requestId++;
+                sendPageFeedRequest(requestId, pages.toString(), listener);
+                pages.delete(0, pages.length());
+                count = 0;
+            }
         }
+        isRequestAllSent = true;
     }
 
-    private void sendPageFeedRequest(String pids, final SNSSearcherContract.LoadCompleteListner listener){
+    public int getRequestId() {
+        return requestId;
+    }
+
+    public boolean isRequestAllSent() {
+        return isRequestAllSent;
+    }
+
+    private void sendPageFeedRequest(final int requestId, String pids, final SNSSearcherContract.LoadCompleteListner listener){
         GraphRequest request = GraphRequest.newGraphPathRequest(
                 accessToken,
-                "feed?ids=" + pids
+                "feed?limit=5&ids=" + pids
                 , new GraphRequest.Callback() {
                     @Override
                     public void onCompleted(GraphResponse response) {
                         if(response.getError() != null) Log.d(TAG, "id likes error:" + response.getError());
                         addPage(response.getJSONObject());
                         Log.d(TAG, "Pages : ");
+                        if(isRequestAllSent() && requestId == getRequestId()){
+                            Log.d(TAG,"All request Completed.");
+                        }
                     }
                 }
         );
@@ -172,7 +192,6 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
         Log.d(TAG,"HTTP Method :"+ request.getHttpMethod());
 
         request.executeAsync();
-
     }
 
     public void getMe(final SNSSearcherContract.LoadCompleteListner listener) {
