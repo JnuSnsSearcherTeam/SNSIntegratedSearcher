@@ -3,7 +3,6 @@ package kr.jnu.embedded.snssearcher.core;
 import android.os.Bundle;
 
 import com.facebook.AccessToken;
-import com.facebook.AccessTokenManager;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.GraphRequest;
@@ -21,12 +20,13 @@ import java.util.List;
  * Created by KANG on 2017-11-22.
  */
 
-public class FacebookSearcher implements SNSSearcher{
+public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter {
     CallbackManager mCallbackManager;
     AccessTokenTracker accessTokenTracker;
     AccessToken accessToken;
+    SNSSearcherContract.View view;
 
-    public FacebookSearcher() {
+    public FacebookSearcherPresenter() {
         mCallbackManager = CallbackManager.Factory.create();
         accessTokenTracker = new AccessTokenTracker(){
             @Override
@@ -73,6 +73,15 @@ public class FacebookSearcher implements SNSSearcher{
         GraphRequestBatch batch = new GraphRequestBatch(userRequest, friendRequest);
         batch.executeAndWait();
         return resultArray;
+    }
 
+    @Override
+    public void setView(SNSSearcherContract.View view) {
+        this.view = view;
+    }
+
+    @Override
+    public List<JSONObject> loadItem() {
+        getPageLists();
     }
 }
