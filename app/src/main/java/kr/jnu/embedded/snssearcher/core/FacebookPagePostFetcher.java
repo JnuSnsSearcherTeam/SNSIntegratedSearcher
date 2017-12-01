@@ -24,10 +24,10 @@ import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
 public class FacebookPagePostFetcher {
     private static final String TAG = "FacebookPostFetcher";
     private AccessToken accessToken;
-    private Callable onFetchComplete;
 
     private ArrayList<JSONObject> idArray = new ArrayList<>();
     private ArrayList<String> pageArray = new ArrayList<>();
+    private ArrayList<JSONObject> postArray = new ArrayList<>();
     private JSONObject pages;
 
     private OnCompleteListener listener;
@@ -46,6 +46,9 @@ public class FacebookPagePostFetcher {
 
     public void start(){
         startGetPageCandidates();
+    }
+    private void complete(){
+        listener.onComplete(pages, postArray);
     }
 
     private void startGetPageCandidates(){
@@ -149,8 +152,6 @@ public class FacebookPagePostFetcher {
         isRequestAllSent = true;
     }
 
-
-
     private void sendPageFeedRequest(final int requestId, String pids){
         GraphRequest request = GraphRequest.newGraphPathRequest(
                 accessToken,
@@ -159,14 +160,12 @@ public class FacebookPagePostFetcher {
                     @Override
                     public void onCompleted(GraphResponse response) {
                         if(response.getError() != null) Log.d(TAG, "id likes error:" + response.getError());
-                        addPage(response.getJSONObject());
-                        Log.d(TAG, "Pages : " + response.getJSONObject());
+                        Log.d(TAG, "Posts : " + response.getJSONObject());
+                        addPost(response.getJSONObject());
+
                         if(isRequestAllSent() && requestId == getRequestId()){
                             Log.d(TAG,"All request Completed.");
-                            try {
-                                onFetchComplete.call();
-                            } catch(Exception e){
-                            }
+                            complete();
                         }
                     }
                 }
@@ -225,5 +224,8 @@ public class FacebookPagePostFetcher {
         catch(JSONException e){
             e.printStackTrace();
         }
+    }
+    private void addPost(JSONObject object){
+        postArray.add(object);
     }
 }

@@ -50,6 +50,7 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
             @Override
             public void onComplete(JSONObject pages, ArrayList<JSONObject> postArray) {
                 parsePages(pages, postArray);
+                listener.onComplete(posts);
             }
         });
 
