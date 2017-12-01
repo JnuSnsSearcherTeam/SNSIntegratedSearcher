@@ -6,6 +6,8 @@ import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
@@ -32,18 +34,18 @@ public class FacebookLoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_facebook_login);
-        resultView = (ResultView) findViewById(R.id.resultView);
+        resultView = new ResultView();
+        Button button = findViewById(R.id.refreshButton);
+
+        FacebookSearcherPresenter facebookSearcher = new FacebookSearcherPresenter();
+        resultView.setPresenter(facebookSearcher);
 
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email");
-
-
+        loginButton.setReadPermissions("email, user_likes, user_friends");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                FacebookSearcherPresenter facebookSearcher = new FacebookSearcherPresenter();
-                resultView.setPresenter(facebookSearcher);
                 resultView.updateItem();
             }
 
@@ -57,6 +59,14 @@ public class FacebookLoginActivity extends AppCompatActivity {
                 // App code
             }
         });
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resultView.updateItem();
+            }
+        });
+
+        resultView.updateItem();
     }
 
     @Override
@@ -65,11 +75,12 @@ public class FacebookLoginActivity extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode,resultCode, data);
     }
 
-    public class ResultView extends AppCompatTextView implements SNSSearcherContract.View{
+    public class ResultView implements SNSSearcherContract.View{
         SNSSearcherContract.Presenter presenter;
+        TextView textView;
 
-        public ResultView(Context context) {
-            super(context);
+        public ResultView() {
+            textView = (TextView) findViewById(R.id.resultView);
         }
 
         @Override
@@ -79,8 +90,12 @@ public class FacebookLoginActivity extends AppCompatActivity {
 
         @Override
         public void updateItem() {
-            List<JSONObject> result = presenter.loadItem();
-            this.setText(result.toString());
+            presenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
+                @Override
+                public void onComplete(List<JSONObject> result) {
+                    textView.setText(result.toString());
+                }
+            });
         }
     }
 }
