@@ -30,78 +30,16 @@ import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
 
 public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter {
     public static final String TAG = "FacebookSearcher";
+    FacebookPostSearcher facebookPostSearcher;
 
     private AccessToken accessToken;
 
     private SNSSearcherContract.View view;
 
-    ArrayList<FacebookPage> pages = new ArrayList<>();
-    ArrayList<FacebookPagePost> posts = new ArrayList<>();
-
-    @Override
-    public void setView(SNSSearcherContract.View view) {
-        this.view = view;
-    }
-
-    @Override
-    public void loadItem(final SNSSearcherContract.LoadCompleteListner listener) {
-        FacebookPagePostFetcher facebookPagePostFetcher = new FacebookPagePostFetcher(accessToken
-                , new FacebookPagePostFetcher.OnCompleteListener() {
-            @Override
-            public void onComplete(ArrayList<JSONObject> pages, ArrayList<JSONObject> postArray) {
-                Log.d(TAG, "Page Post Fetch completed.");
-                parsePages(pages, postArray);
-                Log.d(TAG, "Fetched Posts: " + posts.toString());
-                listener.onComplete(posts);
-            }
-        });
-
-        facebookPagePostFetcher.start();
-        Log.d(TAG, "Page Post Fetch started.");
-    }
-
-    public void parsePages(ArrayList<JSONObject> pageInfo, ArrayList<JSONObject> fetchedPageResult){
-        try {
-            for(JSONObject page : pageInfo) {
-
-                    String name = page.getString("name");
-                    String id = page.getString("id");
-                    String picture = page.getJSONObject("picture").getJSONObject("data").getString("url");
-                    pages.add(new FacebookPage(id, picture, name));
-
-            }
-
-            for(JSONObject object : fetchedPageResult) {
-                for (Iterator<String> itr = object.keys(); !itr.hasNext(); ){
-                    String key = (String)itr.next();
-                    JSONObject item = (JSONObject) object.get(key);
-                    JSONArray data = item.getJSONArray("data");
-                    FacebookPage facebookPage = findPagebyId(key, pages);
-
-                    for(int i=0; i<data.length(); i++){
-                        String message = data.getString(i);
-                        posts.add(new FacebookPagePost(facebookPage, message));
-                    }
-                }
-            }
-        } catch(JSONException je){
-            je.printStackTrace();
-        }
-
-    }
-    private FacebookPage findPagebyId(String key, ArrayList<FacebookPage> pages){
-        for(FacebookPage page : pages){
-            if(page.getID().equals(key)) return page;
-        }
-        return null;
-    }
-
 
     public FacebookSearcherPresenter() {
-        CallbackManager mCallbackManager;
         AccessTokenTracker accessTokenTracker;
 
-        mCallbackManager = CallbackManager.Factory.create();
         accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
@@ -112,5 +50,29 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
         accessToken = AccessToken.getCurrentAccessToken();
     }
 
+    @Override
+    public void setView(SNSSearcherContract.View view) {
+        this.view = view;
+    }
 
+    @Override
+    public void loadItem(final SNSSearcherContract.LoadCompleteListner listener) {
+        fetchProcess();
+
+    }
+    public void fetchProcess(){
+        FacebookPagePostFetcher facebookPagePostFetcher = new FacebookPagePostFetcher(accessToken
+                , new FacebookPagePostFetcher.OnCompleteListener() {
+            @Override
+            public void onComplete(ArrayList<JSONObject> pages, ArrayList<JSONObject> postArray) {
+                facebookPostSearcher = new FacebookPostSearcher("안녕하세요.");
+                facebookPostSearcher.setParameters(pages, postArray);
+                Log.d(TAG, facebookPostSearcher.getPages().toString());
+                Log.d(TAG, facebookPostSearcher.getPosts().toString());
+            }
+        });
+
+        facebookPagePostFetcher.start();
+        Log.d(TAG, "Page Post Fetch started.");
+    }
 }
