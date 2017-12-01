@@ -15,6 +15,10 @@ public class FacebookPagePost {
         this.message = message;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
     @Override
     public String toString() {
         return "FacebookPagePost{" +
