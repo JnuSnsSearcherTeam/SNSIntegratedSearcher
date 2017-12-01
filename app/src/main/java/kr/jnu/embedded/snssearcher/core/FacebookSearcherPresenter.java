@@ -181,7 +181,7 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
                     public void onCompleted(GraphResponse response) {
                         if(response.getError() != null) Log.d(TAG, "id likes error:" + response.getError());
                         addPage(response.getJSONObject());
-                        Log.d(TAG, "Pages : ");
+                        Log.d(TAG, "Pages : " + response.getJSONObject());
                         if(isRequestAllSent() && requestId == getRequestId()){
                             Log.d(TAG,"All request Completed.");
                         }
