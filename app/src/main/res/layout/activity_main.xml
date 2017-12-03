@@ -26,6 +26,38 @@
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            >
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="검색어를 입력하세요"
+                android:textColorHint="#999999"
+                android:layout_toLeftOf="@+id/imageButton1"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/edittext1"
+                android:textColor="#444444"
+                android:layout_alignParentStart="true"
+                android:singleLine = "true"
+                android:lines = "1"
+                />
+
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="#863BEA"
+                android:src="@drawable/search1"
+                android:layout_alignParentRight="true"
+                android:id="@+id/imageButton1" />
+
+        </RelativeLayout>
+
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
@@ -39,5 +71,42 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
+
+    <RelativeLayout
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/floatinglayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/fab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            fab:menu_colorNormal="#ff79c6"
+            fab:menu_colorPressed="#ff0093"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            fab:menu_backgroundColor="#bb888888"
+            fab:menu_labels_ellipsize="end"
+            fab:menu_labels_singleLine="true"
+            fab:menu_labels_position="left">
+
+            <com.github.clans.fab.FloatingActionButton
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/setting"
+                fab:fab_colorNormal="#ff79c6"
+                fab:fab_colorPressed="#ff0093"
+                fab:fab_size="mini"
+                android:id="@+id/fab1"
+                fab:fab_label="Menu item 1"
+                />
+
+        </com.github.clans.fab.FloatingActionMenu>
+
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

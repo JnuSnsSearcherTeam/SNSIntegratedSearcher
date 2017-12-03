@@ -1,12 +1,12 @@
 package kr.jnu.embedded.snssearcher.ui.fragments;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +17,11 @@ import kr.jnu.embedded.snssearcher.base.Item;
 import kr.jnu.embedded.snssearcher.ui.activities.adapter.viewAdapter;
 
 /**
- * Created by Shane on 2017. 12. 1..
+ * Created by shane on 2017. 12. 3..
  */
 
-public class FaceBookFragment extends Fragment {
-    List<Item> items = App.facebookItem;
+public class InstagramFragment extends Fragment {
+    List<Item> items = App.instagramItem;
     protected viewAdapter adapter;
 
     @Override
@@ -46,12 +46,10 @@ public class FaceBookFragment extends Fragment {
         items.addAll(item);
 
         RecyclerView rv = (RecyclerView) inflater.inflate(
-                R.layout.fragment_facebook, container, false);
+                R.layout.fragment_instagram, container, false);
         rv.setLayoutManager(new LinearLayoutManager(rv.getContext()));
         rv.setAdapter(adapter);
 
         return rv;
     }
-
-
 }

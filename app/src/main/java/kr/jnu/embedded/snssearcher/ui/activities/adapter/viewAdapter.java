@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import java.util.List;
 
 import kr.jnu.embedded.snssearcher.R;
@@ -18,8 +16,8 @@ import kr.jnu.embedded.snssearcher.base.Item;
  * Created by Shane on 2017. 12. 1..
  */
 
-public class FaceBookViewAdapter extends RecyclerView
-        .Adapter<FaceBookViewAdapter
+public class viewAdapter extends RecyclerView
+        .Adapter<viewAdapter
         .DataObjectHolder>
 {
     private List<Item> mDataset;
@@ -42,7 +40,7 @@ public class FaceBookViewAdapter extends RecyclerView
         }
     }
 
-    public FaceBookViewAdapter(List<Item> myDataset) {
+    public viewAdapter(List<Item> myDataset) {
         mDataset = myDataset;
     }
 
