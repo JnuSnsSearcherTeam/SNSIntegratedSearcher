@@ -24,27 +24,31 @@ import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
 public class FacebookPagePostFetcher {
     private static final String TAG = "FacebookPostFetcher";
     private AccessToken accessToken;
-    private Callable onFetchComplete;
 
     private ArrayList<JSONObject> idArray = new ArrayList<>();
     private ArrayList<String> pageArray = new ArrayList<>();
-    private ArrayList<FacebookPagePost> resultArray;
+    private ArrayList<JSONObject> postArray = new ArrayList<>();
+    private ArrayList<JSONObject> pages = new ArrayList<>();
 
+    private OnCompleteListener listener;
 
     private boolean isRequestAllSent;
     private int requestId = 0;
 
-    public FacebookPagePostFetcher(AccessToken accessToken, ArrayList<FacebookPagePost> resultArray) {
-        this.accessToken = accessToken;
-        this.resultArray = resultArray;
+    public interface OnCompleteListener{
+        void onComplete(ArrayList<JSONObject> pages, ArrayList<JSONObject> postArray);
     }
 
-    public void onResult(Callable callable){
-        this.onFetchComplete = callable;
+    public FacebookPagePostFetcher(AccessToken accessToken, OnCompleteListener listener) {
+        this.accessToken = accessToken;
+        this.listener = listener;
     }
 
     public void start(){
         startGetPageCandidates();
+    }
+    private void complete(){
+        listener.onComplete(pages, postArray);
     }
 
     private void startGetPageCandidates(){
@@ -125,6 +129,7 @@ public class FacebookPagePostFetcher {
             @Override
             public void onBatchCompleted(GraphRequestBatch batch) {
                 Log.d(TAG, "Page IDs: " + getPageArray());
+                getPageInfo();
                 getFeedsFromPageArray();
             }
         });
@@ -148,7 +153,26 @@ public class FacebookPagePostFetcher {
         isRequestAllSent = true;
     }
 
-
+    private void getPageInfo(){
+        GraphRequestBatch batch = new GraphRequestBatch();
+        for(String pid : pageArray){
+            batch.add(GraphRequest.newGraphPathRequest(
+                    accessToken,
+                    pid + "?fields=name,picture"
+                    , new GraphRequest.Callback() {
+                        @Override
+                        public void onCompleted(GraphResponse response) {
+                            if(response.getError() != null) {
+                                Log.d(TAG, "[getPageInfo] Error occured : " + response.getError());
+                                return;
+                            }
+                            Log.d(TAG,"Page Info : " + response.getJSONObject());
+                            pages.add(response.getJSONObject());
+                        }
+                    }));
+        }
+        batch.executeAsync();
+    }
 
     private void sendPageFeedRequest(final int requestId, String pids){
         GraphRequest request = GraphRequest.newGraphPathRequest(
@@ -158,14 +182,12 @@ public class FacebookPagePostFetcher {
                     @Override
                     public void onCompleted(GraphResponse response) {
                         if(response.getError() != null) Log.d(TAG, "id likes error:" + response.getError());
-                        addPage(response.getJSONObject());
-                        Log.d(TAG, "Pages : " + response.getJSONObject());
+                        Log.d(TAG, "Posts : " + response.getJSONObject());
+                        addPost(response.getJSONObject());
+
                         if(isRequestAllSent() && requestId == getRequestId()){
                             Log.d(TAG,"All request Completed.");
-                            try {
-                                onFetchComplete.call();
-                            } catch(Exception e){
-                            }
+                            complete();
                         }
                     }
                 }
@@ -224,5 +246,8 @@ public class FacebookPagePostFetcher {
         catch(JSONException e){
             e.printStackTrace();
         }
+    }
+    private void addPost(JSONObject object){
+        postArray.add(object);
     }
 }
