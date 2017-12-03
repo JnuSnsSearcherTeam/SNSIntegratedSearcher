@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new TwitterFragment(), "Twitter");
         adapter.addFragment(new InstagramFragment(), "Instagram");
         viewPager.setAdapter(adapter);
+        Intent intent = new Intent(this,InstagramActivity.class);
+        startActivity(intent);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

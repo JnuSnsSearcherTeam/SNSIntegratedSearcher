@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".core.ApplicationClass"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -12,6 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme"
         android:name=".core.ApplicationClass">
+        android:theme="@style/AppTheme">
+      
         <activity android:name=".ui.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,7 +46,8 @@
         </activity>
         <!-- Facebook -->
 
-        <activity android:name=".ui.activities.FacebookLoginActivity"></activity>
+        <activity android:name=".ui.activities.FacebookLoginActivity" />
+        <activity android:name=".ui.activities.InstagramActivity"></activity>
     </application>
 
 </manifest>
