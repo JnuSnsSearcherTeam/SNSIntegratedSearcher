@@ -2,6 +2,7 @@ package kr.jnu.embedded.snssearcher.core;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
+import kr.jnu.embedded.snssearcher.base.App;
 import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
 
 /**
@@ -53,6 +55,9 @@ public class FacebookPagePostFetcher {
 
     private void startGetPageCandidates(){
         Log.d(TAG,"Access Token : " + accessToken);
+        if(accessToken == null){
+            return;
+        }
 
         GraphRequest friendRequest = GraphRequest.newMeRequest(
                 accessToken,

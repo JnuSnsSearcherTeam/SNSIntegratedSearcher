@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SNSIntegratedSearcher.iml" filepath="$PROJECT_DIR$/SNSIntegratedSearcher.iml" />
+      <module fileurl="file://E:\repo\SNSSearcher\SNSIntegratedSearcher.iml" filepath="E:\repo\SNSSearcher\SNSIntegratedSearcher.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SNSSearcher.iml" filepath="$PROJECT_DIR$/SNSSearcher.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -16,7 +16,7 @@ public class InstagramActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instagram);
-        searcher = new InstagramSearcher(getApplicationContext());
+        //searcher = new InstagramSearcher(getApplicationContext());
     }
 
     public class ResultView implements SNSSearcherContract.View{
