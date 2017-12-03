@@ -2,6 +2,7 @@ package kr.jnu.embedded.snssearcher.base;
 
 import android.app.Application;
 
+import com.facebook.AccessToken;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -18,6 +19,7 @@ public class App extends Application {
     public final static List<Item> facebookItem = new ArrayList<>();
     public final static List<Item> twitterItem = new ArrayList<>();
     public final static List<Item> instagramItem = new ArrayList<>();
+    AccessToken faceBookAccessToken;
     @Override
     public void onCreate(){
         super.onCreate();
@@ -34,4 +36,7 @@ public class App extends Application {
         ImageLoader.getInstance().init(config);
     }
 
+    public void setFaceBookAccessToken(AccessToken faceBookAccessToken) {
+        this.faceBookAccessToken = faceBookAccessToken;
+    }
 }
