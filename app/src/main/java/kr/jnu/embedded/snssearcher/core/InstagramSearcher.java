@@ -8,21 +8,39 @@ import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.facebook.AccessToken;
+
+import java.util.Arrays;
+
 /**
  * Created by KANG on 2017-12-03.
  */
 
 public class InstagramSearcher {
+    private static final String TAG = "InstagramSearcher";
     private static final String ClientId = "OTc3ODUwYzg0YWNkNDc1MDlhOTI1MjY2YzBkMzhiMTk="; // 나중에 지울 것.
-    final String AccessTokenUri= "https://api.instagram.com/oauth/authorize/?client_id=977850c84acd47509a925266c0d38b19&redirect_uri=https://github.com/HardPlant&response_type=token";
+    String AccessTokenUri;
     AlertDialog.Builder dialogBuilder;
     AlertDialog dialog;
     String accessToken;
+    Context context;
 
     private static String getClientId(){
-        return Base64.decode(ClientId, Base64.DEFAULT).toString();
+        return Arrays.toString(Base64.decode(ClientId, Base64.DEFAULT));
     }
-    private void get_access_token(Context context){
+
+    public InstagramSearcher(Context context) {
+        AccessTokenUri = "https://api.instagram.com/oauth/authorize/?client_id="
+                + InstagramSearcher.getClientId()
+                + "&redirect_uri=https://github.com/HardPlant&response_type=token";
+
+        this.context = context;
+        get_access_token();
+    }
+
+    private void get_access_token(){
+        if(accessToken != null) return;
+
         WebView webView = new WebView(context);
 
         webView.loadUrl(AccessTokenUri);
@@ -46,7 +64,7 @@ public class InstagramSearcher {
         dialog.show();
 
         if(accessToken != null){
-            Log.d(accessToken);
+            Log.d(TAG, accessToken);
             return;
         }
         return;
