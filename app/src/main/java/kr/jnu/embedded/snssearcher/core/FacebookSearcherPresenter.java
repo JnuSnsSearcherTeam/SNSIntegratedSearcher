@@ -31,6 +31,8 @@ import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
 public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter {
     public static final String TAG = "FacebookSearcher";
     FacebookPostSearcher facebookPostSearcher;
+    SNSSearcherContract.LoadCompleteListner listener;
+    ArrayList<FacebookPagePost> resultPost;
 
     private AccessToken accessToken;
 
@@ -57,10 +59,11 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
 
     @Override
     public void loadItem(final SNSSearcherContract.LoadCompleteListner listener) {
+        this.listener = listener;
         fetchProcess();
-
     }
     public void fetchProcess(){
+
         FacebookPagePostFetcher facebookPagePostFetcher = new FacebookPagePostFetcher(accessToken
                 , new FacebookPagePostFetcher.OnCompleteListener() {
             @Override
@@ -69,6 +72,7 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
                 facebookPostSearcher.setParameters(pages, postArray);
                 Log.d(TAG, facebookPostSearcher.getPages().toString());
                 Log.d(TAG, facebookPostSearcher.getPosts().toString());
+                listener.onComplete(facebookPostSearcher.getPosts());
             }
         });
 
