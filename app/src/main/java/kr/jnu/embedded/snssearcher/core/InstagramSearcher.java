@@ -40,21 +40,9 @@ public class InstagramSearcher {
         return ClientId;
     }
     private static String readUrl(String urlString) throws Exception {
-        BufferedReader reader = null;
-        try {
-            URL url = new URL(urlString);
-            reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-            StringBuffer buffer = new StringBuffer();
-            int read;
-            char[] chars = new char[1024];
-            while ((read = reader.read(chars)) != -1)
-                buffer.append(chars, 0, read);
-
-            return buffer.toString();
-        } finally {
-            if (reader != null)
-                reader.close();
-        }
+        URLLoadTask urlLoadTask = new URLLoadTask();
+        urlLoadTask.execute(urlString);
+        return urlLoadTask.get();
     }
 
     public ArrayList<InstagramMedia> getMyRecentMedia(){

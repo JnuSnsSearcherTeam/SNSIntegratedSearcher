@@ -101,7 +101,7 @@ public class FacebookLoginActivity extends AppCompatActivity {
         public void updateItem() {
             presenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
                 @Override
-                public void onComplete(ArrayList<FacebookPagePost> result) {
+                public void onComplete(ArrayList<Object> result) {
                     textView.setText(result.toString());
                 }
             });
