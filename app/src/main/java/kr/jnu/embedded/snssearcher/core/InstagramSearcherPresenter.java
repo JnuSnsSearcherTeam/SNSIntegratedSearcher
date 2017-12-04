@@ -10,15 +10,24 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
     SNSSearcherContract.View view;
     String tag;
     InstagramSearcher instagramSearcher;
+    String loginResponse;
 
     public InstagramSearcherPresenter(Context context) {
         instagramSearcher = new InstagramSearcher(context);
+    }
+    public String getTokenUrl(){
+        return instagramSearcher.getAccessTokenUri();
     }
 
     public void setTag(String tag) {
         this.tag = tag;
     }
 
+    public void setAccessTokeFromLoginResponse(String response){
+        loginResponse = response;
+        if(loginResponse != null)
+            instagramSearcher.setAccessTokenFromLoginResponse(loginResponse);
+    }
     @Override
     public void loadItem(SNSSearcherContract.LoadCompleteListner listener) {
         listener.onComplete(null);

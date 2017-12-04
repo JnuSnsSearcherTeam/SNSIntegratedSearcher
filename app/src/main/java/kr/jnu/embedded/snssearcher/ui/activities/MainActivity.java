@@ -34,9 +34,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = new Intent(this, InstagramActivity.class);
+        Intent intent = new Intent(this,InstagramActivity.class);
+        startActivity(intent);
 
-/*
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         fab1.setOnClickListener(clickListener);
         fab.setClosedOnTouchOutside(true);
 
-*/
+
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -61,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new TwitterFragment(), "Twitter");
         adapter.addFragment(new InstagramFragment(), "Instagram");
         viewPager.setAdapter(adapter);
-        Intent intent = new Intent(this,InstagramActivity.class);
-        startActivity(intent);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

@@ -35,7 +35,6 @@ public class InstagramSearcher {
     AlertDialog.Builder dialogBuilder;
     AlertDialog dialog;
     String accessToken;
-    Context context;
 
     private static String getClientId(){
         return ClientId;
@@ -96,34 +95,18 @@ public class InstagramSearcher {
         return accessToken;
     }
 
-    public boolean setAccessToken(String accessToken){
-        this.accessToken = accessToken;
+    public boolean setAccessTokenFromLoginResponse(String accessTokenUrl){
+        this.accessToken = getAccessTokenFromRedirectUrl(accessTokenUrl);
         return true;
     }
 
-    public InstagramSearcher(Context context) {
+    public InstagramSearcher() {
         AccessTokenUri = "https://api.instagram.com/oauth/authorize/?client_id="
                 + InstagramSearcher.getClientId()
                 + "&redirect_uri=https://github.com/HardPlant&response_type=token"
                 + "&scope=public_content";
-
-        this.context = context;
-        //setAccessToken();
+        //setAccessTokenFromLoginResponse();
         //get_access_token();
-    }
-    private boolean setAccessToken(){
-        try {
-            String redirectedUrl;
-            URL accessTokenUrl = new URL(AccessTokenUri);
-            HttpURLConnection connection = (HttpURLConnection) accessTokenUrl.openConnection();
-            InputStream in = connection.getInputStream();
-            redirectedUrl = connection.getURL().toString();
-            accessToken = redirectedUrl.substring(redirectedUrl.lastIndexOf('#'));
-            in.close();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return true;
     }
 
     private void get_access_token(){
@@ -160,5 +143,9 @@ public class InstagramSearcher {
 
     public String getAccessToken() {
         return accessToken;
+    }
+
+    public String getAccessTokenUri() {
+        return AccessTokenUri;
     }
 }

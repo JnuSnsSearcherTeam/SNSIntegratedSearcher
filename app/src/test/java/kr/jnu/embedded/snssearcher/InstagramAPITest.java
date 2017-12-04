@@ -37,7 +37,7 @@ public class InstagramAPITest {
     public void getMyRecentMediaTest(){
         InstagramSearcher searcher = new InstagramSearcher(null);
         String accessToken =  searcher.getAccessTokenFromRedirectUrl("https://github.com/HardPlant#access_token=6659598238.977850c.d9c9676226ae471a878d34d6e177bbec");
-        searcher.setAccessToken(accessToken);
+        searcher.setAccessTokenFromLoginResponse(accessToken);
         System.out.println(searcher.getMyRecentMedia());
     }
 }
