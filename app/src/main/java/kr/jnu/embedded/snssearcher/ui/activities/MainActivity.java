@@ -87,8 +87,9 @@ public class MainActivity extends AppCompatActivity {
                 facebookSearcherPresenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
                     @Override
                     public void onComplete(ArrayList<Object> result) {
-                        Log.d(TAG, App.facebookItem.toString());
-                        Toast.makeText(getApplicationContext(), App.facebookItem.toString(),Toast.LENGTH_LONG).show();
+                        if (viewPager != null) {
+                            setupViewPager(viewPager);
+                        }
                     }
                 });
                 instagramSearcherPresenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
@@ -99,12 +100,6 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
-
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        if (viewPager != null) {
-            setupViewPager(viewPager);
-        }
-
 
     }
 

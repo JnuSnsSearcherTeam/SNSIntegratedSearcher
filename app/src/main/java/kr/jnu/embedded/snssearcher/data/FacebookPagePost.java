@@ -2,6 +2,11 @@ package kr.jnu.embedded.snssearcher.data;
 
 import android.media.Image;
 
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import kr.jnu.embedded.snssearcher.base.App;
 import kr.jnu.embedded.snssearcher.base.Item;
 
@@ -11,11 +16,17 @@ import kr.jnu.embedded.snssearcher.base.Item;
 
 public class FacebookPagePost {
     FacebookPage page;
+    String createdTime;
     String message;
 
-    public FacebookPagePost(FacebookPage page, String message) {
+    public FacebookPagePost(FacebookPage page, JSONObject jsonObject) {
         this.page = page;
-        this.message = message;
+        try {
+            this.message = jsonObject.get("message").toString();
+            this.createdTime = jsonObject.get("created_time").toString();
+        } catch (Exception e ) {
+
+        }
     }
 
     public String getMessage() {
@@ -32,8 +43,8 @@ public class FacebookPagePost {
     public Item toFacebookItem(){
         return new Item(this.page.getName()
         ,"아이콘"
-        ,"날짜"
-        ,"텍스트"
+        ,createdTime
+        ,message
         ,"텍스트이미지");
     }
 }
