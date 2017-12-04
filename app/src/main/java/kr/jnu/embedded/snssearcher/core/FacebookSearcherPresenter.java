@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.concurrent.Callable;
 
 import kr.jnu.embedded.snssearcher.base.App;
+import kr.jnu.embedded.snssearcher.base.Item;
 import kr.jnu.embedded.snssearcher.data.FacebookPage;
 import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
 
@@ -88,7 +89,9 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
 
                 for(Object item : resultPost){
                     Log.d(TAG, "Item Added: " + item.toString());
-                    App.facebookItem.add(((FacebookPagePost)item).toFacebookItem());
+                    Item toAdd = ((FacebookPagePost)item).toFacebookItem();
+                    if(toAdd != null) App.facebookItem.add(toAdd);
+
                 }
 
                 listener.onComplete(resultPost);

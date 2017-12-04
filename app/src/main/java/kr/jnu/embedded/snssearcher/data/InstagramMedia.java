@@ -36,10 +36,7 @@ public class InstagramMedia {
             this.userName = object.getJSONObject("user").getString("full_name");
             this.userProfile = object.getJSONObject("user").getString("profile_picture");
             this.imageUri = object.getJSONObject("images").getJSONObject("thumbnail").getString("url");
-            String time = object.getString("created_time");
-            Timestamp timestamp = new Timestamp(Integer.parseInt(createdTime));
-            Date date = new Date(timestamp.getTime());
-            this.createdTime = date.toString();
+            this.createdTime = object.getString("created_time");
             this.link = object.getString("link");
             this.message = object.getJSONObject("caption").getString("text");
         }catch (Exception e){

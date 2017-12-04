@@ -30,6 +30,7 @@ public class FacebookPagePost {
     }
 
     public String getMessage() {
+        if(message == null) return "";
         return message;
     }
 
@@ -41,6 +42,7 @@ public class FacebookPagePost {
                 '}';
     }
     public Item toFacebookItem(){
+        if(page == null) return null;
         return new Item(this.page.getName()
         ,this.page.getIconUrl()
         ,createdTime

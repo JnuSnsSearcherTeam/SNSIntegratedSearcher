@@ -248,6 +248,7 @@ public class FacebookPagePostFetcher {
         for(FacebookPage page : pages_final){
             if(page.getID().equals(pid)) return page;
         }
+        Log.d(TAG, "Null occured: " + pid);
         return null;
     }
 

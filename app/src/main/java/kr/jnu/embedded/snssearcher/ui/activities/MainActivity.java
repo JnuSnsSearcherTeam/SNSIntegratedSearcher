@@ -84,18 +84,20 @@ public class MainActivity extends AppCompatActivity {
                 facebookSearcherPresenter.setKeyword(name);
                 instagramSearcherPresenter.setTag(name);
 
-                facebookSearcherPresenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
+                /*facebookSearcherPresenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
                     @Override
                     public void onComplete(ArrayList<Object> result) {
                         if (viewPager != null) {
                             setupViewPager(viewPager);
                         }
                     }
-                });
+                });*/
                 instagramSearcherPresenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
                     @Override
                     public void onComplete(ArrayList<Object> result) {
-
+                        if (viewPager != null) {
+                            setupViewPager(viewPager);
+                        }
                     }
                 });
             }

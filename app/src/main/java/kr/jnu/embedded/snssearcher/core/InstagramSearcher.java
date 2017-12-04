@@ -31,7 +31,6 @@ import kr.jnu.embedded.snssearcher.data.InstagramMedia;
 
 public class InstagramSearcher {
     private static final String TAG = "InstagramSearcher";
-    String accessToken;
 
     private static String readUrl(String urlString) throws Exception {
         URLLoadTask urlLoadTask = new URLLoadTask();
@@ -40,7 +39,6 @@ public class InstagramSearcher {
     }
 
     public InstagramSearcher() {
-        this.accessToken = App.instagramAccessToken;
     }
 
     public ArrayList<InstagramMedia> getMyRecentMedia(){
@@ -56,11 +54,14 @@ public class InstagramSearcher {
 
     public ArrayList<InstagramMedia> getInstagramData(String Url){
         Log.d(TAG, "getInstagramData called");
-        if(accessToken == null) return null;
+        if(App.instagramAccessToken == null){
+            Log.d(TAG, "AccessToken is null called");
+            return null;
+        }
         String dest = Url;
         try {
 
-            String resp = readUrl(dest+"?access_token="+accessToken);
+            String resp = readUrl(dest+"?access_token="+App.instagramAccessToken);
 
             JSONObject result = new JSONObject(resp);
             Log.d(TAG, "result: " + result);
