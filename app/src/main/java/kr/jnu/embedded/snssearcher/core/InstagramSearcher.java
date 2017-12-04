@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import kr.jnu.embedded.snssearcher.base.App;
 import kr.jnu.embedded.snssearcher.data.InstagramMedia;
 
 /**
@@ -38,8 +39,8 @@ public class InstagramSearcher {
         return urlLoadTask.get();
     }
 
-    public InstagramSearcher(String accessToken) {
-        this.accessToken = accessToken;
+    public InstagramSearcher() {
+        this.accessToken = App.instagramAccessToken;
     }
 
     public ArrayList<InstagramMedia> getMyRecentMedia(){

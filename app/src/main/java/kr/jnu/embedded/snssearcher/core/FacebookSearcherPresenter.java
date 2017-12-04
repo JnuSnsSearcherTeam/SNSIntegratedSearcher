@@ -85,6 +85,7 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
                 resultPost.addAll(list);
 
                 for(Object item : resultPost){
+                    Log.d(TAG, "Item Added: " + item.toString());
                     App.facebookItem.add(((FacebookPagePost)item).toFacebookItem());
                 }
 
