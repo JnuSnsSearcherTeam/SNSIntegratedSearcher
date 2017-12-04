@@ -44,4 +44,12 @@ public class App extends Application {
     public void setInstagramAccessToken(String instagramAccessToken) {
         this.instagramAccessToken = instagramAccessToken;
     }
+
+    public AccessToken getFaceBookAccessToken() {
+        return faceBookAccessToken;
+    }
+
+    public String getInstagramAccessToken() {
+        return instagramAccessToken;
+    }
 }

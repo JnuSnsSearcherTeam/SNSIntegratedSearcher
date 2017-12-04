@@ -10,36 +10,35 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import kr.jnu.embedded.snssearcher.base.App;
+
 /**
  * Created by KANG on 2017-12-03.
  */
 
 public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter {
     private static final String TAG = "InstaSearcherPresenter";
-    SNSSearcherContract.View view;
-    String tag;
-    InstagramSearcher instagramSearcher;
-    String loginResponse;
+    private SNSSearcherContract.View view;
+    private String tag;
+    private InstagramSearcher instagramSearcher;
+    private App application;
 
-    public InstagramSearcherPresenter() {
-        instagramSearcher = new InstagramSearcher();
+
+    public InstagramSearcherPresenter(Context context) {
+        application = (App)context.getApplicationContext();
+        instagramSearcher = new InstagramSearcher(application.getInstagramAccessToken());
     }
 
     public void setTag(String tag) {
         this.tag = tag;
     }
 
-    public void setAccessTokeFromLoginResponse(String response){
-        loginResponse = response;
-        if(loginResponse != null)
-            instagramSearcher.setAccessTokenFromLoginResponse(loginResponse);
-    }
     @Override
     public void loadItem(SNSSearcherContract.LoadCompleteListner listener) {
         ArrayList<Object> result = new ArrayList<>();
         Log.d(TAG, "loaditem call");
 
-        if(instagramSearcher.getAccessToken() == null){
+        if(isAccessTokenSet()){
             Log.d(TAG, "AccessToken is null");
             listener.onComplete(null);
             return;
@@ -56,7 +55,7 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
     }
 
     public boolean isAccessTokenSet(){
-        if(instagramSearcher.getAccessToken() == null) return false;
+        if(application.getInstagramAccessToken() == null) return false;
 
         return true;
     }
