@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -23,12 +24,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.jnu.embedded.snssearcher.R;
+import kr.jnu.embedded.snssearcher.base.App;
+import kr.jnu.embedded.snssearcher.core.FacebookSearcherPresenter;
+import kr.jnu.embedded.snssearcher.core.InstagramSearcherPresenter;
+import kr.jnu.embedded.snssearcher.core.SNSSearcherContract;
 import kr.jnu.embedded.snssearcher.ui.fragments.FaceBookFragment;
 import kr.jnu.embedded.snssearcher.ui.fragments.InstagramFragment;
 import kr.jnu.embedded.snssearcher.ui.fragments.TwitterFragment;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String TAG = "MainActivity";
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -38,10 +43,16 @@ public class MainActivity extends AppCompatActivity {
     ImageButton imageButton;
     String name;
 
+    FacebookSearcherPresenter facebookSearcherPresenter;
+    InstagramSearcherPresenter instagramSearcherPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        facebookSearcherPresenter = new FacebookSearcherPresenter(this);
+        instagramSearcherPresenter = new InstagramSearcherPresenter(this);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -70,23 +81,29 @@ public class MainActivity extends AppCompatActivity {
                 imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
                 name = editText.getText().toString();
 
-                /**
-                 *  여기다가 추가해주시면 됩니다.
-                 */
+                facebookSearcherPresenter.setKeyword(name);
+                instagramSearcherPresenter.setTag(name);
 
+                facebookSearcherPresenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
+                    @Override
+                    public void onComplete(ArrayList<Object> result) {
+                        Log.d(TAG, App.facebookItem.toString());
+                        Toast.makeText(getApplicationContext(), App.facebookItem.toString(),Toast.LENGTH_LONG).show();
+                    }
+                });
+                instagramSearcherPresenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
+                    @Override
+                    public void onComplete(ArrayList<Object> result) {
 
-
-
-
-
-
-                ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-                if (viewPager != null) {
-                    setupViewPager(viewPager);
-                }
-
+                    }
+                });
             }
         });
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        if (viewPager != null) {
+            setupViewPager(viewPager);
+        }
 
 
     }
