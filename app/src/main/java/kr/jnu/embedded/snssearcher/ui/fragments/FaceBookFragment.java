@@ -3,6 +3,7 @@ package kr.jnu.embedded.snssearcher.ui.fragments;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,17 +35,7 @@ public class FaceBookFragment extends Fragment {
                              Bundle savedInstanceState) {
         adapter = new viewAdapter(items);
 
-        List<Item> item = new ArrayList<>();
-        //TEST
-        item.add(new Item("name1","","10월 23일","텍스트 테스트 123", ""));
-        item.add(new Item("name2","","10월 23일","텍스트 테스트 123456", ""));
-        item.add(new Item("name3","","10월 23일","텍스트 테스트 1233", ""));
-        item.add(new Item("name4","","10월 23일","텍스트3", ""));
-        item.add(new Item("name5","","10월 23일","텍스트트 123", ""));
-
-        items.clear();
-        items.addAll(item);
-
+        Log.i("hi", App.facebookItem.toString());
         RecyclerView rv = (RecyclerView) inflater.inflate(
                 R.layout.fragment_facebook, container, false);
         rv.setLayoutManager(new LinearLayoutManager(rv.getContext()));

@@ -2,8 +2,10 @@ package kr.jnu.embedded.snssearcher.data;
 
 import android.media.Image;
 
-import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import kr.jnu.embedded.snssearcher.base.App;
 import kr.jnu.embedded.snssearcher.base.Item;
@@ -14,47 +16,31 @@ import kr.jnu.embedded.snssearcher.base.Item;
 
 public class FacebookPagePost {
     FacebookPage page;
-    String message;
     String createdTime;
+    String message;
 
-    public FacebookPagePost(FacebookPage page, String message, String createdTime) {
+    public FacebookPagePost(FacebookPage page, JSONObject jsonObject) {
         this.page = page;
-        this.message = message;
-        this.createdTime = createdTime;
-    }
-
-    public FacebookPagePost(FacebookPage page, JSONObject object){
         try {
-            this.page = page;
-            this.createdTime = object.getString("created_time");
-        } catch(JSONException je){
-            je.printStackTrace();
-        }
-        try {
-            this.message = object.getString("message");
-        }catch(JSONException je){
+            this.message = jsonObject.get("message").toString();
+            this.createdTime = jsonObject.get("created_time").toString();
+        } catch (Exception e ) {
 
         }
     }
 
     public String getMessage() {
-        if(message != null)
-            return message;
-        return "";
+        return message;
     }
 
     @Override
     public String toString() {
         return "FacebookPagePost{" +
                 "page=" + page +
-                ", message='" + message.length() + '\'' +
+                ", message='" + message + '\'' +
                 '}';
     }
-
     public Item toFacebookItem(){
-        if(page == null) return new Item("","","","","");
-
-        else
         return new Item(this.page.getName()
         ,this.page.getIconUrl()
         ,createdTime

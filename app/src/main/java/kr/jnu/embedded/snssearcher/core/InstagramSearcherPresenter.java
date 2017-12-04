@@ -43,7 +43,10 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
         }
 
         ArrayList<InstagramMedia> list = instagramSearcher.getHashTagMedia(tag);
-        if(list == null) return;
+        if(list == null){
+            Log.d(TAG, "hashtag list null");
+            return;
+        }
         result.addAll(list);
 
         for(Object item : result){

@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.util.List;
 
 import kr.jnu.embedded.snssearcher.R;
@@ -36,6 +38,7 @@ public class viewAdapter extends RecyclerView
             nametext = (TextView) itemView.findViewById(R.id.name_text);
             datetext = (TextView) itemView.findViewById(R.id.date_text);
             texttext = (TextView) itemView.findViewById(R.id.text_text);
+            userImageview = (ImageView) itemView.findViewById(R.id.imageView);
 //            imageview = (ImageView) itemView.findViewById(R.id.avatar);
         }
     }
@@ -59,7 +62,7 @@ public class viewAdapter extends RecyclerView
         holder.nametext.setText(mDataset.get(position).getName());
         holder.datetext.setText(mDataset.get(position).getDate());
         holder.texttext.setText(mDataset.get(position).getText());
-//        ImageLoader.getInstance().displayImage(mDataset.get(position).getUserImage(), holder.imageview);
+        ImageLoader.getInstance().displayImage(mDataset.get(position).getUserImage(), holder.userImageview);
 
     }
 
