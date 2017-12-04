@@ -32,17 +32,14 @@ public class InstagramSearcher {
     private static final String TAG = "InstagramSearcher";
     String accessToken;
 
-    public static String getAccessTokenUri() {
-        return "https://api.instagram.com/oauth/authorize/?client_id="
-                + "977850c84acd47509a925266c0d38b19"
-                + "&redirect_uri=https://github.com/HardPlant&response_type=token"
-                + "&scope=public_content";
-    }
-
     private static String readUrl(String urlString) throws Exception {
         URLLoadTask urlLoadTask = new URLLoadTask();
         urlLoadTask.execute(urlString);
         return urlLoadTask.get();
+    }
+
+    public InstagramSearcher(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     public ArrayList<InstagramMedia> getMyRecentMedia(){
@@ -77,24 +74,5 @@ public class InstagramSearcher {
         return null;
     }
 
-    public static String getAccessTokenFromRedirectUrl(String redirectedUrl){
-        String accessToken = redirectedUrl.substring(redirectedUrl.lastIndexOf('#'));
-        accessToken = accessToken.substring(accessToken.lastIndexOf('=')+1);
-        return accessToken;
-    }
-
-    public boolean setAccessTokenFromLoginResponse(String accessTokenUrl){
-        this.accessToken = getAccessTokenFromRedirectUrl(accessTokenUrl);
-        return true;
-    }
-
-    public InstagramSearcher() {
-        //setAccessTokenFromLoginResponse();
-        //get_access_token();
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
 
 }
