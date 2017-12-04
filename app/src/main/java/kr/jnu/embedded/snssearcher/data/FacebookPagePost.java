@@ -42,7 +42,7 @@ public class FacebookPagePost {
     }
     public Item toFacebookItem(){
         return new Item(this.page.getName()
-        ,"아이콘"
+        ,this.page.getIconUrl()
         ,createdTime
         ,message
         ,"텍스트이미지");
