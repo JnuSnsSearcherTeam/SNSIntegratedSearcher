@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 
 import org.json.JSONObject;
 
+import kr.jnu.embedded.snssearcher.base.Item;
+
 /**
  * Created by KANG on 2017-12-04.
  */
@@ -34,6 +36,10 @@ public class InstagramMedia {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public Item toInstagramItem(){
+        return new Item(userName,"", createdTime, message,imageUri);
     }
 
     @Override

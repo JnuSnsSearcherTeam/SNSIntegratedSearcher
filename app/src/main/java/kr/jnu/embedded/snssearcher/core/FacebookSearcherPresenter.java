@@ -1,5 +1,6 @@
 package kr.jnu.embedded.snssearcher.core;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Picture;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
 
+import kr.jnu.embedded.snssearcher.base.App;
 import kr.jnu.embedded.snssearcher.data.FacebookPage;
 import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
 
@@ -33,13 +35,14 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
     FacebookPostSearcher facebookPostSearcher;
     SNSSearcherContract.LoadCompleteListner listener;
     ArrayList<Object> resultPost;
+    private App application;
 
     private AccessToken accessToken;
 
     private SNSSearcherContract.View view;
 
 
-    public FacebookSearcherPresenter() {
+    public FacebookSearcherPresenter(Context context) {
         AccessTokenTracker accessTokenTracker;
 
         accessTokenTracker = new AccessTokenTracker() {
@@ -74,6 +77,10 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
                 Log.d(TAG, facebookPostSearcher.getPosts().toString());
 
                 resultPost.addAll(facebookPostSearcher.getPosts());
+
+                for(Object item : resultPost){
+                    App.facebookItem.add(((FacebookPagePost)item).toFacebookItem());
+                }
 
                 listener.onComplete(resultPost);
             }
