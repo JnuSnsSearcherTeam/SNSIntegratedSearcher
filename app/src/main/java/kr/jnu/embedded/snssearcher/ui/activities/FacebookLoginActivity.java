@@ -49,11 +49,11 @@ public class FacebookLoginActivity extends AppCompatActivity {
         });
 
     }
-    void facebookLogin(){
+    private void facebookLogin(){
         LoginManager.getInstance().logInWithReadPermissions(this,
                 Arrays.asList("email, user_likes, user_friends"));
     }
-    void instaLogin(){
+    private void instaLogin(){
         InstagramLoginManager loginManager = InstagramLoginManager.getInstance(this);
         loginManager.showLoginDialog();
     }
