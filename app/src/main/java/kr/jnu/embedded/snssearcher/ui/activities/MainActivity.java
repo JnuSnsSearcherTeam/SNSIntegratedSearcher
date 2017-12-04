@@ -34,7 +34,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = new Intent(this, InstagramActivity.class);
 
+/*
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         fab1.setOnClickListener(clickListener);
         fab.setClosedOnTouchOutside(true);
 
-
+*/
     }
 
     private void setupViewPager(ViewPager viewPager) {
