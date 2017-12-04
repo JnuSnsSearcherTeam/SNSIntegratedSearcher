@@ -67,13 +67,10 @@ public class InstagramSearcher {
             System.out.println("response : " + resp);
 
             JSONObject result = new JSONObject(resp);
-            System.out.println("result : " + result.toString());
-
             JSONArray data = result.getJSONArray("data");
-            System.out.println("data : " + data.toString());
             ArrayList<InstagramMedia> medias = new ArrayList<>();
+
             for(int i=0; i<data.length();i++){
-                System.out.println("data in : " + data.getJSONObject(i).toString());
                 medias.add(new InstagramMedia(data.getJSONObject(i)));
             }
             return medias;

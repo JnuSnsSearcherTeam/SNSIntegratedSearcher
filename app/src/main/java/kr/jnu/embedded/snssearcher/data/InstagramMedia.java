@@ -14,12 +14,14 @@ public class InstagramMedia {
     Bitmap image;
     String createdTime;
     String link;
+    String message;
 
     public InstagramMedia(String userName, String imageUri, String createdTime, String link) {
         this.userName = userName;
         this.imageUri = imageUri;
         this.createdTime = createdTime;
         this.link = link;
+        this.message = message;
     }
 
     public InstagramMedia(JSONObject object) {
@@ -28,6 +30,7 @@ public class InstagramMedia {
             this.imageUri = object.getJSONObject("images").getJSONObject("thumbnail").getString("url");
             this.createdTime = object.getString("created_time");
             this.link = object.getString("link");
+            this.message = object.getJSONObject("caption").getString("text");
         }catch (Exception e){
             e.printStackTrace();
         }
