@@ -11,7 +11,9 @@ import android.webkit.WebViewClient;
 import com.facebook.AccessToken;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
@@ -39,12 +41,20 @@ public class InstagramSearcher {
         try {
             URL url = new URL(dest + accessToken);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            InputStream in =connection.getInputStream();
-            in.read();
-            String result = in.toString();
-            return result;
-        } catch(Exception e){
+            connection.setReadTimeout(15*1000);
+            connection.connect();
 
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder stringBuilder = new StringBuilder();
+
+            String line = null;
+            while((line = reader.readLine()) != null){
+                stringBuilder.append(line);
+            }
+            return stringBuilder.toString();
+
+        } catch(Exception e){
+            e.printStackTrace();
         }
         return null;
     }
