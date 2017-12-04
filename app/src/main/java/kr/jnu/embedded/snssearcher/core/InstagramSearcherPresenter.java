@@ -12,8 +12,8 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
     InstagramSearcher instagramSearcher;
     String loginResponse;
 
-    public InstagramSearcherPresenter(Context context) {
-        instagramSearcher = new InstagramSearcher(context);
+    public InstagramSearcherPresenter() {
+        instagramSearcher = new InstagramSearcher();
     }
     public String getTokenUrl(){
         return instagramSearcher.getAccessTokenUri();

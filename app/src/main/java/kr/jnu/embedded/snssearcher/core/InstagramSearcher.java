@@ -109,38 +109,6 @@ public class InstagramSearcher {
         //get_access_token();
     }
 
-    private void get_access_token(){
-        if(accessToken != null) return;
-
-        WebView webView = new WebView(context);
-
-        webView.loadUrl(AccessTokenUri);
-        dialogBuilder = new AlertDialog.Builder(context);
-
-        webView.setWebViewClient(new WebViewClient(){
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if(url.contains("#access_token=")){
-                    accessToken = url.substring(url.indexOf("#access_token"),url.length());
-                    dialog.cancel();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        dialogBuilder.setView(webView);
-        dialogBuilder.setPositiveButton("Okay", null);
-        dialog = dialogBuilder.create();
-        dialog.show();
-
-        if(accessToken != null){
-            Log.d(TAG, accessToken);
-            return;
-        }
-        return;
-    }
-
     public String getAccessToken() {
         return accessToken;
     }
