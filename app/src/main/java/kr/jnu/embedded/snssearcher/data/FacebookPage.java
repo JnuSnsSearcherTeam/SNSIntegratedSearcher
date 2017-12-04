@@ -29,6 +29,8 @@ public class FacebookPage {
         return Icon;
     }
 
+    public String getIconUrl() { return IconUrl;}
+
     @Override
     public String toString() {
         return "FacebookPage{" +

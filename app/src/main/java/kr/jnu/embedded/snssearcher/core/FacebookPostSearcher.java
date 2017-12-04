@@ -63,8 +63,7 @@ public class FacebookPostSearcher {
                     if(facebookPage == null) continue;
 
                     for(int i=0; i<data.length(); i++){
-                        String message = data.getString(i);
-                        posts.add(new FacebookPagePost(facebookPage, message));
+                        posts.add(new FacebookPagePost(facebookPage, data.getJSONObject(i)));
                     }
                 }
             }
