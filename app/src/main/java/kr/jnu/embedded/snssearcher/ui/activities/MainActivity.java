@@ -1,5 +1,6 @@
 package kr.jnu.embedded.snssearcher.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -9,7 +10,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -29,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private FloatingActionMenu fab;
     private FloatingActionButton fab1;
+    EditText editText;
+    ImageButton imageButton;
+    String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,36 @@ public class MainActivity extends AppCompatActivity {
         fab1.setLabelText("계정설정");
         fab1.setOnClickListener(clickListener);
         fab.setClosedOnTouchOutside(true);
+
+
+        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        editText = (EditText) findViewById(R.id.edittext1);
+        imageButton = (ImageButton) findViewById(R.id.imageButton1);
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+                name = editText.getText().toString();
+
+                /**
+                 *  여기다가 추가해주시면 됩니다.
+                 */
+
+
+
+
+
+
+
+                ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+                if (viewPager != null) {
+                    setupViewPager(viewPager);
+                }
+
+            }
+        });
 
 
     }
