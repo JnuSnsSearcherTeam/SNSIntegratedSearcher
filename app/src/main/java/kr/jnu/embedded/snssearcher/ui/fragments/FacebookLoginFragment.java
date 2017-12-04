@@ -19,4 +19,5 @@ import kr.jnu.embedded.snssearcher.R;
  */
 
 public class FacebookLoginFragment extends Fragment {
+
 }

@@ -30,81 +30,46 @@ import java.util.List;
 import kr.jnu.embedded.snssearcher.R;
 import kr.jnu.embedded.snssearcher.base.App;
 import kr.jnu.embedded.snssearcher.core.FacebookSearcherPresenter;
+import kr.jnu.embedded.snssearcher.core.InstagramLoginManager;
+import kr.jnu.embedded.snssearcher.core.InstagramSearcherPresenter;
 import kr.jnu.embedded.snssearcher.core.SNSSearcherContract;
 import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
 
 public class FacebookLoginActivity extends AppCompatActivity {
-    CallbackManager callbackManager;
-    LoginButton loginButton;
-    ResultView resultView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_facebook_login);
-        resultView = new ResultView();
-        Button button = findViewById(R.id.refreshButton);
+        Button facebookButton = findViewById(R.id.facebookButton);
+        Button instagramButton = findViewById(R.id.instagramButton);
 
-        FacebookSearcherPresenter facebookSearcher = new FacebookSearcherPresenter();
-        resultView.setPresenter(facebookSearcher);
-
-        callbackManager = CallbackManager.Factory.create();
-        loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email, user_likes, user_friends");
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                ((App)getApplicationContext()).setFaceBookAccessToken(loginResult.getAccessToken());
-                resultView.updateItem();
-            }
-
-            @Override
-            public void onCancel() {
-                // App code
-            }
-
-            @Override
-            public void onError(FacebookException exception) {
-                // App code
-            }
-        });
-        LoginManager.getInstance().logInWithReadPermissions(this,
-                Arrays.asList("email, user_likes, user_friends"));
-        button.setOnClickListener(new View.OnClickListener() {
+        facebookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                resultView.updateItem();
+                facebookLogin();
             }
         });
+        instagramButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                instaLogin();
+            }
+        });
+
+    }
+    void facebookLogin(){
+        LoginManager.getInstance().logInWithReadPermissions(this,
+                Arrays.asList("email, user_likes, user_friends"));
+    }
+    void instaLogin(){
+        InstagramLoginManager loginManager = InstagramLoginManager.getInstance(this);
+        loginManager.showLoginDialog();
     }
 
     @Override
+    /*페이스북 관련 액티비티에 필요*/
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode,resultCode, data);
     }
 
-    public class ResultView implements SNSSearcherContract.View{
-        SNSSearcherContract.Presenter presenter;
-        TextView textView;
-
-        public ResultView() {
-            textView = (TextView) findViewById(R.id.resultView);
-        }
-
-        @Override
-        public void setPresenter(SNSSearcherContract.Presenter presenter) {
-            this.presenter = presenter;
-        }
-
-        @Override
-        public void updateItem() {
-            presenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
-                @Override
-                public void onComplete(ArrayList<Object> result) {
-                    textView.setText(result.toString());
-                }
-            });
-        }
-    }
 }

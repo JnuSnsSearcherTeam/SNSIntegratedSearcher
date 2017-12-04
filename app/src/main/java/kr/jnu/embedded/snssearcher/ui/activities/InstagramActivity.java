@@ -20,7 +20,7 @@ import kr.jnu.embedded.snssearcher.core.SNSSearcherContract;
 public class InstagramActivity extends AppCompatActivity {
     InstagramSearcherPresenter presenter;
     Button button;
-    AlertDialog InstagramLoginDialog;
+
     private static final String TAG = "InstagramActivity";
 
     @Override
@@ -36,37 +36,10 @@ public class InstagramActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showLoginDialog();
                 Log.d(TAG,"다이얼로그 종료");
                 resultView.updateItem();
             }
         });
-
-    }
-    private void testActivity(){
-        presenter.setTag("행인두부");
-
-    }
-
-    private void showLoginDialog(){
-        Uri uri = Uri.parse(presenter.getTokenUrl());
-        WebView webView = new WebView(this);
-        webView.loadUrl(uri.toString());
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        webView.setWebViewClient(new WebViewClient(){
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Log.d(TAG, url);
-                if(url.contains("access_token=")) {
-                    presenter.setAccessTokeFromLoginResponse(url);
-                    InstagramLoginDialog.dismiss();
-                }
-                return false;
-            }
-        });
-        dialogBuilder.setView(webView);
-        InstagramLoginDialog = dialogBuilder.create();
-        InstagramLoginDialog.show();
     }
 
     public class ResultView implements SNSSearcherContract.View{

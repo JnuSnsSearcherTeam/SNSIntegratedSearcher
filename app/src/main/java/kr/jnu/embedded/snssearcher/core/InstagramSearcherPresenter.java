@@ -1,7 +1,11 @@
 package kr.jnu.embedded.snssearcher.core;
 
 import android.content.Context;
+import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,9 +24,6 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
     public InstagramSearcherPresenter() {
         instagramSearcher = new InstagramSearcher();
     }
-    public String getTokenUrl(){
-        return instagramSearcher.getAccessTokenUri();
-    }
 
     public void setTag(String tag) {
         this.tag = tag;
@@ -40,15 +41,11 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
 
         if(instagramSearcher.getAccessToken() == null){
             Log.d(TAG, "AccessToken is null");
-            return;
-        }
-        Log.d(TAG,instagramSearcher.getMyRecentMedia().toString());
-        if(instagramSearcher.getMyRecentMedia() == null){
-            Log.d(TAG, "getMyRecentMedia is null.");
+            listener.onComplete(null);
             return;
         }
 
-        result.addAll(instagramSearcher.getMyRecentMedia());
+        result.addAll(instagramSearcher.getHashTagMedia(tag));
 
         listener.onComplete(result);
     }
@@ -56,5 +53,11 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
     @Override
     public void setView(SNSSearcherContract.View view) {
         this.view = view;
+    }
+
+    public boolean isAccessTokenSet(){
+        if(instagramSearcher.getAccessToken() == null) return false;
+
+        return true;
     }
 }
