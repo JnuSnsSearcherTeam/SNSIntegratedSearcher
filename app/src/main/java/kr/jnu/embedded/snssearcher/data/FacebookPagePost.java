@@ -46,11 +46,15 @@ public class FacebookPagePost {
     @Override
     public String toString() {
         return "FacebookPagePost{" +
-                ", message='" + message + '\'' +
+                "page=" + page +
+                "message='" + message.length() + '\'' +
                 '}';
     }
 
     public Item toFacebookItem(){
+        if(page == null) return new Item("","","","","");
+
+        else
         return new Item(this.page.getName()
         ,this.page.getIconUrl()
         ,createdTime

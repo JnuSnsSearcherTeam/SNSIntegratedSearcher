@@ -35,6 +35,7 @@ public class FacebookPage {
     }
 
     public String getName() {
+        if(Name == null) return "";
         return Name;
     }
 
@@ -45,7 +46,7 @@ public class FacebookPage {
     @Override
     public String toString() {
         return "FacebookPage{" +
-                ", Name='" + Name + '\'' +
+                "Name='" + Name + '\'' +
                 ", ID='" + ID + '\'' +
                 '}';
     }

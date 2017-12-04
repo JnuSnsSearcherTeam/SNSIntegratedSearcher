@@ -74,13 +74,15 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
         final FacebookPagePostFetcher facebookPagePostFetcher = new FacebookPagePostFetcher(accessToken
                 , new FacebookPagePostFetcher.OnCompleteListener() {
             @Override
-            public void onComplete(ArrayList<JSONObject> pages, ArrayList<JSONObject> postArray) {
+            public void onComplete(ArrayList<FacebookPage> pages, ArrayList<FacebookPagePost> postArray) {
                 resultPost = new ArrayList<Object>();
                 facebookPostSearcher = new FacebookPostSearcher(keyword);
                 facebookPostSearcher.setParameters(pages, postArray);
+
                 Log.d(TAG, facebookPostSearcher.getPages().toString());
                 Log.d(TAG, facebookPostSearcher.getPosts().toString());
                 ArrayList<FacebookPagePost> list = facebookPostSearcher.getPosts();
+
                 if(list == null) return;
                 resultPost.addAll(list);
 

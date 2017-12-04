@@ -18,8 +18,8 @@ public class FacebookPostMetadata {
     public FacebookPostMetadata(JSONObject object, String pageId) {
         FacebookPage = pageId;
         try {
-            data = object.getJSONObject(pageId).getJSONArray("data");
-            paging = object.getJSONObject(pageId).getJSONObject("paging");
+            data = object.getJSONArray("data");
+            paging = object.getJSONObject("paging");
             cursors = paging.getJSONObject("cursors");
             next = paging.getString("next");
         }catch(JSONException je){
@@ -44,5 +44,13 @@ public class FacebookPostMetadata {
 
     public String getNext() {
         return next;
+    }
+
+    @Override
+    public String toString() {
+        return "FacebookPostMetadata{" +
+                "FacebookPage='" + FacebookPage + '\'' +
+                ", data=" + data +
+                '}';
     }
 }
