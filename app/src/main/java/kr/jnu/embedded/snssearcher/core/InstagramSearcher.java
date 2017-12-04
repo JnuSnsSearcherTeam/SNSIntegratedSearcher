@@ -30,31 +30,16 @@ import kr.jnu.embedded.snssearcher.data.InstagramMedia;
 
 public class InstagramSearcher {
     private static final String TAG = "InstagramSearcher";
-    private static final String ClientId = "977850c84acd47509a925266c0d38b19"; // 나중에 지울 것.
-    String AccessTokenUri;
-    AlertDialog.Builder dialogBuilder;
-    AlertDialog dialog;
     String accessToken;
 
-    private static String getClientId(){
-        return ClientId;
-    }
     private static String readUrl(String urlString) throws Exception {
-        BufferedReader reader = null;
-        try {
-            URL url = new URL(urlString);
-            reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-            StringBuffer buffer = new StringBuffer();
-            int read;
-            char[] chars = new char[1024];
-            while ((read = reader.read(chars)) != -1)
-                buffer.append(chars, 0, read);
+        URLLoadTask urlLoadTask = new URLLoadTask();
+        urlLoadTask.execute(urlString);
+        return urlLoadTask.get();
+    }
 
-            return buffer.toString();
-        } finally {
-            if (reader != null)
-                reader.close();
-        }
+    public InstagramSearcher(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     public ArrayList<InstagramMedia> getMyRecentMedia(){
@@ -89,31 +74,5 @@ public class InstagramSearcher {
         return null;
     }
 
-    public String getAccessTokenFromRedirectUrl(String redirectedUrl){
-        String accessToken = redirectedUrl.substring(redirectedUrl.lastIndexOf('#'));
-        accessToken = accessToken.substring(accessToken.lastIndexOf('=')+1);
-        return accessToken;
-    }
 
-    public boolean setAccessTokenFromLoginResponse(String accessTokenUrl){
-        this.accessToken = getAccessTokenFromRedirectUrl(accessTokenUrl);
-        return true;
-    }
-
-    public InstagramSearcher() {
-        AccessTokenUri = "https://api.instagram.com/oauth/authorize/?client_id="
-                + InstagramSearcher.getClientId()
-                + "&redirect_uri=https://github.com/HardPlant&response_type=token"
-                + "&scope=public_content";
-        //setAccessTokenFromLoginResponse();
-        //get_access_token();
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public String getAccessTokenUri() {
-        return AccessTokenUri;
-    }
 }

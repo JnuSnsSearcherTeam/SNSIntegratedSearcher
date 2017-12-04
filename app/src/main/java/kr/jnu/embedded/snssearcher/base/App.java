@@ -19,7 +19,8 @@ public class App extends Application {
     public final static List<Item> facebookItem = new ArrayList<>();
     public final static List<Item> twitterItem = new ArrayList<>();
     public final static List<Item> instagramItem = new ArrayList<>();
-    AccessToken faceBookAccessToken;
+    private AccessToken faceBookAccessToken;
+    private String instagramAccessToken;
     @Override
     public void onCreate(){
         super.onCreate();
@@ -38,5 +39,17 @@ public class App extends Application {
 
     public void setFaceBookAccessToken(AccessToken faceBookAccessToken) {
         this.faceBookAccessToken = faceBookAccessToken;
+    }
+
+    public void setInstagramAccessToken(String instagramAccessToken) {
+        this.instagramAccessToken = instagramAccessToken;
+    }
+
+    public AccessToken getFaceBookAccessToken() {
+        return faceBookAccessToken;
+    }
+
+    public String getInstagramAccessToken() {
+        return instagramAccessToken;
     }
 }

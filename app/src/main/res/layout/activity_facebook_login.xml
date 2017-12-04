@@ -6,25 +6,20 @@
     android:layout_height="match_parent"
     tools:context="kr.jnu.embedded.snssearcher.ui.activities.FacebookLoginActivity">
 
-    <com.facebook.login.widget.LoginButton
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/login_button"
+    <Button
+        android:id="@+id/facebookButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
         />
     <Button
-        android:id="@+id/refreshButton"
+        android:id="@+id/instagramButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/login_button"/>
-    <TextView
-        android:id="@+id/resultView"
+        android:layout_below="@+id/facebookButton">
+    </Button>
+    <Button
+        android:id="@+id/checkAccessToken"
+        android:layout_below="@+id/instagramButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/login_button"
-        />
-
+        android:layout_height="wrap_content" />
 </RelativeLayout>
