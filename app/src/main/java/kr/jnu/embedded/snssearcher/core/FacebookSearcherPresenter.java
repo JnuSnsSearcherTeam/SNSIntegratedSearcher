@@ -35,12 +35,12 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
     FacebookPostSearcher facebookPostSearcher;
     SNSSearcherContract.LoadCompleteListner listener;
     ArrayList<Object> resultPost;
+    String keyword;
     private App application;
 
     private AccessToken accessToken;
 
     private SNSSearcherContract.View view;
-
 
     public FacebookSearcherPresenter(Context context) {
         AccessTokenTracker accessTokenTracker;
@@ -53,6 +53,10 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
         };
         accessTokenTracker.startTracking();
         accessToken = AccessToken.getCurrentAccessToken();
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     @Override
@@ -71,12 +75,14 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
                 , new FacebookPagePostFetcher.OnCompleteListener() {
             @Override
             public void onComplete(ArrayList<JSONObject> pages, ArrayList<JSONObject> postArray) {
-                facebookPostSearcher = new FacebookPostSearcher("안녕하세요.");
+                resultPost = new ArrayList<Object>();
+                facebookPostSearcher = new FacebookPostSearcher(keyword);
                 facebookPostSearcher.setParameters(pages, postArray);
                 Log.d(TAG, facebookPostSearcher.getPages().toString());
                 Log.d(TAG, facebookPostSearcher.getPosts().toString());
-
-                resultPost.addAll(facebookPostSearcher.getPosts());
+                ArrayList<FacebookPagePost> list = facebookPostSearcher.getPosts();
+                if(list == null) return;
+                resultPost.addAll(list);
 
                 for(Object item : resultPost){
                     App.facebookItem.add(((FacebookPagePost)item).toFacebookItem());

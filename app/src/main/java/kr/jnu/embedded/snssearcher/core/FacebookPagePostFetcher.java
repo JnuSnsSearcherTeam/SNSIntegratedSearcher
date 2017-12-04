@@ -50,6 +50,8 @@ public class FacebookPagePostFetcher {
         startGetPageCandidates();
     }
     private void complete(){
+        Log.d(TAG,"pages : " + pages.toString());
+        Log.d(TAG,"postArray : " + postArray.toString());
         listener.onComplete(pages, postArray);
     }
 

@@ -24,7 +24,6 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
     private InstagramSearcher instagramSearcher;
     private App application;
 
-
     public InstagramSearcherPresenter(Context context) {
         application = (App)context.getApplicationContext();
         instagramSearcher = new InstagramSearcher(application.getInstagramAccessToken());
@@ -44,8 +43,9 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
             listener.onComplete(null);
             return;
         }
-
-        result.addAll(instagramSearcher.getHashTagMedia(tag));
+        ArrayList<InstagramMedia> list = instagramSearcher.getHashTagMedia(tag);
+        if(list == null) return;
+        result.addAll(list);
 
         for(Object item : result){
             App.instagramItem.add(((InstagramMedia)item).toInstagramItem());
