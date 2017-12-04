@@ -10,13 +10,19 @@ import android.webkit.WebViewClient;
 
 import com.facebook.AccessToken;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+
+import kr.jnu.embedded.snssearcher.data.InstagramMedia;
 
 /**
  * Created by KANG on 2017-12-03.
@@ -35,23 +41,42 @@ public class InstagramSearcher {
         return ClientId;
         //return Arrays.toString(Base64.decode(ClientId, Base64.DEFAULT));
     }
-    public String getMyRecentMedia(){
+    private static String readUrl(String urlString) throws Exception {
+        BufferedReader reader = null;
+        try {
+            URL url = new URL(urlString);
+            reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+            StringBuffer buffer = new StringBuffer();
+            int read;
+            char[] chars = new char[1024];
+            while ((read = reader.read(chars)) != -1)
+                buffer.append(chars, 0, read);
+
+            return buffer.toString();
+        } finally {
+            if (reader != null)
+                reader.close();
+        }
+    }
+    public ArrayList<InstagramMedia> getMyRecentMedia(){
         if(accessToken == null) return null;
         String dest = "https://api.instagram.com/v1/users/self/media/recent/?access_token=";
         try {
-            URL url = new URL(dest + accessToken);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setReadTimeout(15*1000);
-            connection.connect();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder stringBuilder = new StringBuilder();
+            String resp = readUrl(dest+accessToken);
+            System.out.println("response : " + resp);
 
-            String line = null;
-            while((line = reader.readLine()) != null){
-                stringBuilder.append(line);
+            JSONObject result = new JSONObject(resp);
+            System.out.println("result : " + result.toString());
+
+            JSONArray data = result.getJSONArray("data");
+            System.out.println("data : " + data.toString());
+            ArrayList<InstagramMedia> medias = new ArrayList<>();
+            for(int i=0; i<data.length();i++){
+                System.out.println("data in : " + data.getJSONObject(i).toString());
+                medias.add(new InstagramMedia(data.getJSONObject(i)));
             }
-            return stringBuilder.toString();
+            return medias;
 
         } catch(Exception e){
             e.printStackTrace();
