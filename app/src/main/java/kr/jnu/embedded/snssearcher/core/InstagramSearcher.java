@@ -39,7 +39,6 @@ public class InstagramSearcher {
 
     private static String getClientId(){
         return ClientId;
-        //return Arrays.toString(Base64.decode(ClientId, Base64.DEFAULT));
     }
     private static String readUrl(String urlString) throws Exception {
         BufferedReader reader = null;
@@ -58,13 +57,23 @@ public class InstagramSearcher {
                 reader.close();
         }
     }
+
     public ArrayList<InstagramMedia> getMyRecentMedia(){
+        return getInstagramData("https://api.instagram.com/v1/users/self/media/recent/");
+    }
+
+    public ArrayList<InstagramMedia> getHashTagMedia(String tagName){
+        String url = "https://api.instagram.com/v1/tags/{tag-name}/media/recent"
+                .replace("{tag-name}",tagName);
+        return getInstagramData(url);
+    }
+
+    public ArrayList<InstagramMedia> getInstagramData(String Url){
         if(accessToken == null) return null;
-        String dest = "https://api.instagram.com/v1/users/self/media/recent/?access_token=";
+        String dest = Url;
         try {
 
-            String resp = readUrl(dest+accessToken);
-            System.out.println("response : " + resp);
+            String resp = readUrl(dest+"?access_token="+accessToken);
 
             JSONObject result = new JSONObject(resp);
             JSONArray data = result.getJSONArray("data");
@@ -86,6 +95,7 @@ public class InstagramSearcher {
         accessToken = accessToken.substring(accessToken.lastIndexOf('=')+1);
         return accessToken;
     }
+
     public boolean setAccessToken(String accessToken){
         this.accessToken = accessToken;
         return true;
