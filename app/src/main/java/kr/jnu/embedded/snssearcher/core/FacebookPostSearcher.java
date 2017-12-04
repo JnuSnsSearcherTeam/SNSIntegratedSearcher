@@ -54,7 +54,7 @@ public class FacebookPostSearcher {
             }
 
             for(JSONObject object : fetchedPageResult) {
-                Log.d(TAG, "Page Object: " + object);
+                Log.d(TAG, "Post Object: " + object);
                 for (Iterator<String> itr = object.keys(); itr.hasNext(); ){
                     String key = (String)itr.next();
                     JSONObject item = (JSONObject) object.get(key);
