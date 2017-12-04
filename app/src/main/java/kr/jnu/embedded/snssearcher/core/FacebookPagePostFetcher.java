@@ -18,6 +18,7 @@ import java.util.concurrent.Callable;
 
 import kr.jnu.embedded.snssearcher.base.App;
 import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
+import kr.jnu.embedded.snssearcher.data.FacebookPostMetadata;
 
 /**
  * Created by KANG on 2017-12-01.
@@ -181,7 +182,11 @@ public class FacebookPagePostFetcher {
         batch.executeAsync();
     }
 
-    private void sendPageFeedRequest(final int requestId, String pids){
+    private void parsePageInfo(){
+
+    }
+
+    private void sendPageFeedRequest(final int requestId, final String pids){
         GraphRequest request = GraphRequest.newGraphPathRequest(
                 accessToken,
                 "feed?limit=5&field=message&ids=" + pids
@@ -190,6 +195,7 @@ public class FacebookPagePostFetcher {
                     public void onCompleted(GraphResponse response) {
                         if(response.getError() != null) Log.d(TAG, "id likes error:" + response.getError());
                         Log.d(TAG, "Posts : " + response.getJSONObject());
+                        parseMetadata(pids.split(","), response.getJSONObject());
                         addPost(response.getJSONObject());
 
                         if(isRequestAllSent() && requestId == getRequestId()){
@@ -203,6 +209,20 @@ public class FacebookPagePostFetcher {
         Log.d(TAG,"HTTP Method :"+ request.getHttpMethod());
 
         request.executeAsync();
+    }
+    private void parseMetadata(String[] pids, JSONObject response){
+        ArrayList<FacebookPostMetadata> metadatas = new ArrayList<>();
+        try {
+            for (String pid : pids) {
+                JSONObject data = response.getJSONObject(pid);
+                FacebookPostMetadata metadata = new FacebookPostMetadata(data, pid);
+                metadatas.add(metadata);
+            }
+        }catch(JSONException e){
+
+        }
+        Log.d(TAG, "Parsed metadata : " + metadatas);
+
     }
 
     private int getRequestId() {

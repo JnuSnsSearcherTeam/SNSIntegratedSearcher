@@ -36,11 +36,12 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
         ArrayList<Object> result = new ArrayList<>();
         Log.d(TAG, "loaditem call");
 
-        if(isAccessTokenSet()){
+        if(!isAccessTokenSet()){
             Log.d(TAG, "AccessToken is null");
             listener.onComplete(null);
             return;
         }
+
         ArrayList<InstagramMedia> list = instagramSearcher.getHashTagMedia(tag);
         if(list == null) return;
         result.addAll(list);

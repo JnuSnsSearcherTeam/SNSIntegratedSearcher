@@ -11,6 +11,7 @@ import java.util.Iterator;
 
 import kr.jnu.embedded.snssearcher.data.FacebookPage;
 import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
+import kr.jnu.embedded.snssearcher.data.FacebookPostMetadata;
 
 /**
  * Created by KANG on 2017-12-01.
@@ -20,6 +21,7 @@ public class FacebookPostSearcher {
     private static final String TAG = "FacebookPostSearcher";
     private ArrayList<FacebookPage> pages = new ArrayList<>();
     private ArrayList<FacebookPagePost> posts = new ArrayList<>();
+    private ArrayList<FacebookPostMetadata> metadatas = new ArrayList<>();
     private String keyword;
 
     FacebookPagePostFetcher facebookPagePostFetcher;
@@ -46,26 +48,30 @@ public class FacebookPostSearcher {
 
     public void parsePages(ArrayList<JSONObject> pageInfo, ArrayList<JSONObject> fetchedPageResult){
         try {
+            //페이지 리스트 가져오기
             for(JSONObject page : pageInfo) {
-                String name = page.getString("name");
-                String id = page.getString("id");
-                String picture = page.getJSONObject("picture").getJSONObject("data").getString("url");
-                pages.add(new FacebookPage(id, picture, name));
+                pages.add(new FacebookPage(page));
             }
-
+            // /pages~로 아이디에서 한번에 가져온 포스트들
             for(JSONObject object : fetchedPageResult) {
                 Log.d(TAG, "Post Object: " + object);
                 for (Iterator<String> itr = object.keys(); itr.hasNext(); ){
                     String key = (String)itr.next();
                     JSONObject item = (JSONObject) object.get(key);
-                    JSONArray data = item.getJSONArray("data");
-                    FacebookPage facebookPage = findPagebyId(key, pages);
-                    if(facebookPage == null) continue;
-
-                    for(int i=0; i<data.length(); i++){
-                        String message = data.getString(i);
-                        posts.add(new FacebookPagePost(facebookPage, message));
-                    }
+                    FacebookPostMetadata metadata = new FacebookPostMetadata(item, key);
+                    metadatas.add(metadata);
+                }
+            }
+            // 메타데이터들의 배열에서 포스트 생성
+            for(FacebookPostMetadata metadata : metadatas){
+                JSONArray data = metadata.getData();
+                if(data==null) continue;
+                Log.d("item from metadata: ",data.toString());
+                for(int i=0; i<data.length(); i++){
+                    JSONObject post = data.getJSONObject(i);
+                    Log.d("Post-made item: ",post.toString());
+                    FacebookPage facebookPage = findPagebyId(metadata.getFacebookPage(), pages);
+                    posts.add(new FacebookPagePost(facebookPage, post));
                 }
             }
         } catch(JSONException je){
@@ -82,6 +88,8 @@ public class FacebookPostSearcher {
 
     private void searchString(String keyword){
         ArrayList<FacebookPagePost> toRemove = new ArrayList<>();
+        if(posts == null) return;
+
         for(FacebookPagePost post : posts){
             if(!post.getMessage().contains(keyword))
                 toRemove.add(post);

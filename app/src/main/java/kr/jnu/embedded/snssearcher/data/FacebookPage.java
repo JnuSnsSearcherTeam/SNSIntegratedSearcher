@@ -1,6 +1,10 @@
 package kr.jnu.embedded.snssearcher.data;
 
 import android.graphics.Bitmap;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by KANG on 2017-12-01.
  */
@@ -16,6 +20,15 @@ public class FacebookPage {
         IconUrl = iconUrl;
         Name = name;
     }
+    public FacebookPage(JSONObject object){
+        try {
+            ID = object.getString("id");
+            Name = object.getString("name");
+            IconUrl = object.getJSONObject("picture").getJSONObject("data").getString("url");
+        } catch (JSONException je){
+            je.printStackTrace();
+        }
+    }
 
     public String getID() {
         return ID;
@@ -25,14 +38,13 @@ public class FacebookPage {
         return Name;
     }
 
-    public Bitmap getIcon() {
-        return Icon;
+    public String getIconUrl() {
+        return IconUrl;
     }
 
     @Override
     public String toString() {
         return "FacebookPage{" +
-                "IconUrl='" + IconUrl + '\'' +
                 ", Name='" + Name + '\'' +
                 ", ID='" + ID + '\'' +
                 '}';
