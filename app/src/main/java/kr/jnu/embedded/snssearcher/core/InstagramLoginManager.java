@@ -61,7 +61,12 @@ public class InstagramLoginManager {
             });
             dialogBuilder.setView(webView);
             InstagramLoginDialog = dialogBuilder.create();
-            InstagramLoginDialog.show();
+            try {
+                InstagramLoginDialog.show();
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+
         }
 
 }
