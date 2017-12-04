@@ -47,7 +47,7 @@ public class FacebookPagePost {
     public String toString() {
         return "FacebookPagePost{" +
                 "page=" + page +
-                "message='" + message.length() + '\'' +
+                ", message='" + message.length() + '\'' +
                 '}';
     }
 

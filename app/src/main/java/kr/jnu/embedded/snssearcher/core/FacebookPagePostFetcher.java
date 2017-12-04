@@ -220,6 +220,7 @@ public class FacebookPagePostFetcher {
     }
     private void parseMetadata(String[] pids, JSONObject response){
         ArrayList<FacebookPostMetadata> metadatas = new ArrayList<>();
+        Log.d(TAG, "PIDS : " + pids.toString());
         try {
             for (String pid : pids) {
                 Log.d(TAG, "pid: " + pid);
@@ -245,7 +246,7 @@ public class FacebookPagePostFetcher {
 
     private FacebookPage findPage(String pid) {
         for(FacebookPage page : pages_final){
-            if(page.getID() == pid) return page;
+            if(page.getID().equals(pid)) return page;
         }
         return null;
     }
