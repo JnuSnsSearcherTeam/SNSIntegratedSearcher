@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import kr.jnu.embedded.snssearcher.base.App;
+import kr.jnu.embedded.snssearcher.data.InstagramMedia;
 
 /**
  * Created by KANG on 2017-12-03.
@@ -45,6 +46,10 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
         }
 
         result.addAll(instagramSearcher.getHashTagMedia(tag));
+
+        for(Object item : result){
+            App.instagramItem.add(((InstagramMedia)item).toInstagramItem());
+        }
 
         listener.onComplete(result);
     }

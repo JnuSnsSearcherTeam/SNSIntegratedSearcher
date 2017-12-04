@@ -53,5 +53,4 @@ public class FaceBookFragment extends Fragment {
         return rv;
     }
 
-
 }
