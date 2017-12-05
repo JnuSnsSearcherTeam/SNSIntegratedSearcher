@@ -19,8 +19,8 @@ public class App extends Application {
     public final static List<Item> facebookItem = new ArrayList<>();
     public final static List<Item> twitterItem = new ArrayList<>();
     public final static List<Item> instagramItem = new ArrayList<>();
-    private AccessToken faceBookAccessToken;
-    private String instagramAccessToken;
+    public static AccessToken faceBookAccessToken;
+    public static String instagramAccessToken;
     @Override
     public void onCreate(){
         super.onCreate();
@@ -37,19 +37,11 @@ public class App extends Application {
         ImageLoader.getInstance().init(config);
     }
 
-    public void setFaceBookAccessToken(AccessToken faceBookAccessToken) {
-        this.faceBookAccessToken = faceBookAccessToken;
+    public static void setFaceBookAccessToken(AccessToken faceBookAccessToken) {
+        faceBookAccessToken = faceBookAccessToken;
     }
 
-    public void setInstagramAccessToken(String instagramAccessToken) {
-        this.instagramAccessToken = instagramAccessToken;
-    }
-
-    public AccessToken getFaceBookAccessToken() {
-        return faceBookAccessToken;
-    }
-
-    public String getInstagramAccessToken() {
-        return instagramAccessToken;
+    public static void setInstagramAccessToken(String instagramAccessToken) {
+        instagramAccessToken = instagramAccessToken;
     }
 }

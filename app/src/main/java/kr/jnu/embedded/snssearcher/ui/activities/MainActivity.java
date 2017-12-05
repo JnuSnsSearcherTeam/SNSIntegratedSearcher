@@ -95,7 +95,9 @@ public class MainActivity extends AppCompatActivity {
                 instagramSearcherPresenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
                     @Override
                     public void onComplete(ArrayList<Object> result) {
-
+                        if (viewPager != null) {
+                            setupViewPager(viewPager);
+                        }
                     }
                 });
             }

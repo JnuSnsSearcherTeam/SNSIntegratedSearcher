@@ -22,11 +22,9 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
     private SNSSearcherContract.View view;
     private String tag;
     private InstagramSearcher instagramSearcher;
-    private App application;
 
     public InstagramSearcherPresenter(Context context) {
-        application = (App)context.getApplicationContext();
-        instagramSearcher = new InstagramSearcher(application.getInstagramAccessToken());
+        instagramSearcher = new InstagramSearcher();
     }
 
     public void setTag(String tag) {
@@ -38,13 +36,17 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
         ArrayList<Object> result = new ArrayList<>();
         Log.d(TAG, "loaditem call");
 
-        if(isAccessTokenSet()){
+        if(!isAccessTokenSet()){
             Log.d(TAG, "AccessToken is null");
             listener.onComplete(null);
             return;
         }
+
         ArrayList<InstagramMedia> list = instagramSearcher.getHashTagMedia(tag);
-        if(list == null) return;
+        if(list == null){
+            Log.d(TAG, "hashtag list null");
+            return;
+        }
         result.addAll(list);
 
         for(Object item : result){
@@ -60,7 +62,7 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
     }
 
     public boolean isAccessTokenSet(){
-        if(application.getInstagramAccessToken() == null) return false;
+        if(App.instagramAccessToken == null) return false;
 
         return true;
     }

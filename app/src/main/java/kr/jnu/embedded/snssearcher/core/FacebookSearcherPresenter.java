@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.concurrent.Callable;
 
 import kr.jnu.embedded.snssearcher.base.App;
+import kr.jnu.embedded.snssearcher.base.Item;
 import kr.jnu.embedded.snssearcher.data.FacebookPage;
 import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
 
@@ -74,18 +75,23 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
         final FacebookPagePostFetcher facebookPagePostFetcher = new FacebookPagePostFetcher(accessToken
                 , new FacebookPagePostFetcher.OnCompleteListener() {
             @Override
-            public void onComplete(ArrayList<JSONObject> pages, ArrayList<JSONObject> postArray) {
+            public void onComplete(ArrayList<FacebookPage> pages, ArrayList<FacebookPagePost> postArray) {
                 resultPost = new ArrayList<Object>();
                 facebookPostSearcher = new FacebookPostSearcher(keyword);
                 facebookPostSearcher.setParameters(pages, postArray);
+
                 Log.d(TAG, facebookPostSearcher.getPages().toString());
                 Log.d(TAG, facebookPostSearcher.getPosts().toString());
                 ArrayList<FacebookPagePost> list = facebookPostSearcher.getPosts();
+
                 if(list == null) return;
                 resultPost.addAll(list);
 
                 for(Object item : resultPost){
-                    App.facebookItem.add(((FacebookPagePost)item).toFacebookItem());
+                    Log.d(TAG, "Item Added: " + item.toString());
+                    Item toAdd = ((FacebookPagePost)item).toFacebookItem();
+                    if(toAdd != null) App.facebookItem.add(toAdd);
+
                 }
 
                 listener.onComplete(resultPost);

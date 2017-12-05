@@ -47,17 +47,17 @@ public class FacebookLoginActivity extends AppCompatActivity {
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("Activity","Instagram: " + ((App)getApplicationContext()).getInstagramAccessToken());
+                Log.d("Activity","Instagram: " + App.instagramAccessToken);
                 Log.d("Activity","facebook" + AccessToken.getCurrentAccessToken());
             }
         });
 
     }
-    void facebookLogin(){
+    private void facebookLogin(){
         LoginManager.getInstance().logInWithReadPermissions(this,
                 Arrays.asList("email, user_likes, user_friends"));
     }
-    void instaLogin(){
+    private void instaLogin(){
         InstagramLoginManager loginManager = InstagramLoginManager.getInstance(this);
         loginManager.showLoginDialog();
     }

@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 
 import org.json.JSONObject;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+
 import kr.jnu.embedded.snssearcher.base.Item;
 
 /**
@@ -13,6 +16,7 @@ import kr.jnu.embedded.snssearcher.base.Item;
 public class InstagramMedia {
     String userName;
     String imageUri;
+    String userProfile;
     Bitmap image;
     String createdTime;
     String link;
@@ -20,6 +24,7 @@ public class InstagramMedia {
 
     public InstagramMedia(String userName, String imageUri, String createdTime, String link) {
         this.userName = userName;
+        this.userProfile = userProfile;
         this.imageUri = imageUri;
         this.createdTime = createdTime;
         this.link = link;
@@ -28,7 +33,8 @@ public class InstagramMedia {
 
     public InstagramMedia(JSONObject object) {
         try {
-            this.userName = object.getJSONObject("user").getString("username");
+            this.userName = object.getJSONObject("user").getString("full_name");
+            this.userProfile = object.getJSONObject("user").getString("profile_picture");
             this.imageUri = object.getJSONObject("images").getJSONObject("thumbnail").getString("url");
             this.createdTime = object.getString("created_time");
             this.link = object.getString("link");
@@ -36,10 +42,11 @@ public class InstagramMedia {
         }catch (Exception e){
             e.printStackTrace();
         }
+
     }
 
     public Item toInstagramItem(){
-        return new Item(userName,"", createdTime, message,imageUri);
+        return new Item(userName,userProfile,createdTime, message,imageUri);
     }
 
     @Override

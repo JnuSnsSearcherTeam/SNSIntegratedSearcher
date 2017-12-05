@@ -16,13 +16,11 @@ import kr.jnu.embedded.snssearcher.base.App;
 public class InstagramLoginManager {
         private static final String TAG = "LoginManager";
         private static InstagramLoginManager instance;
-        private Context context;
         private AlertDialog InstagramLoginDialog;
-        private App application;
+        Context context;
 
         private InstagramLoginManager(Context context) {
             this.context = context;
-            this.application = ((App)context.getApplicationContext());
         }
 
         public static InstagramLoginManager getInstance(Context context){
@@ -54,7 +52,7 @@ public class InstagramLoginManager {
                     Log.d(TAG, url);
                     if(url.contains("access_token=")) {
                         String accessToken = getAccessTokenFromRedirectUrl(url);
-                        application.setInstagramAccessToken(accessToken);
+                        App.instagramAccessToken = accessToken;
 
                         InstagramLoginDialog.dismiss();
                     }
@@ -63,7 +61,12 @@ public class InstagramLoginManager {
             });
             dialogBuilder.setView(webView);
             InstagramLoginDialog = dialogBuilder.create();
-            InstagramLoginDialog.show();
+            try {
+                InstagramLoginDialog.show();
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+
         }
 
 }
