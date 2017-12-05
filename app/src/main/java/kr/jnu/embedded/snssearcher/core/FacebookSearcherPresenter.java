@@ -65,7 +65,6 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
 
     @Override
     public void loadItem() {
-        App.facebookItem.clear();
         fetchProcess();
         view.updateItem();
     }
