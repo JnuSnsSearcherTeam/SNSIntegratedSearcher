@@ -35,6 +35,7 @@ public class FaceBookFragment extends Fragment implements SNSSearcherContract.Vi
 
     @Override
     public void updateItem() {
+        if(adapter == null) adapter = new viewAdapter(items);
         adapter.notifyDataSetChanged();
     }
 

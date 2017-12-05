@@ -1,11 +1,13 @@
 package kr.jnu.embedded.snssearcher.data;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import org.json.JSONObject;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 import kr.jnu.embedded.snssearcher.base.Item;
 
@@ -35,14 +37,21 @@ public class InstagramMedia {
         try {
             this.userName = object.getJSONObject("user").getString("full_name");
             this.userProfile = object.getJSONObject("user").getString("profile_picture");
-            this.imageUri = object.getJSONObject("images").getJSONObject("thumbnail").getString("url");
-            this.createdTime = object.getString("created_time");
+            this.imageUri = object.getJSONObject("images").getJSONObject("low_resolution").getString("url");
+            String createdTime = object.getString("created_time");
+            this.createdTime = toDateFormat(createdTime);
             this.link = object.getString("link");
             this.message = object.getJSONObject("caption").getString("text");
         }catch (Exception e){
             e.printStackTrace();
         }
 
+    }
+    public String toDateFormat(String time){
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd aa hh:mm:ss");
+
+        Date date = new Date(Long.parseLong(time)*1000);
+        return sf.format(date);
     }
 
     public Item toInstagramItem(){

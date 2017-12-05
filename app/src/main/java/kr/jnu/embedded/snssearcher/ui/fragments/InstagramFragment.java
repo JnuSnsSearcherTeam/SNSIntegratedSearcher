@@ -52,6 +52,7 @@ public class InstagramFragment extends Fragment implements SNSSearcherContract.V
 
     @Override
     public void updateItem() {
+        if(adapter == null) adapter = new viewAdapter(items);
         adapter.notifyDataSetChanged();
     }
 }
