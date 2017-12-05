@@ -18,12 +18,14 @@ public class FacebookPagePost {
     FacebookPage page;
     String createdTime;
     String message;
+    Date createdDate;
 
     public FacebookPagePost(FacebookPage page, JSONObject jsonObject) {
         this.page = page;
         try {
             this.message = jsonObject.get("message").toString();
-            this.createdTime = jsonObject.get("created_time").toString();
+            String createdTime = jsonObject.get("created_time").toString();
+            this.createdTime = toDateFormat(createdTime);
         } catch (Exception e ) {
 
         }
@@ -32,6 +34,16 @@ public class FacebookPagePost {
     public String getMessage() {
         if(message == null) return "";
         return message;
+    }
+    private String toDateFormat(String time){
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss+SSSS");
+        try {
+            this.createdDate = sf.parse(time);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd aa hh:mm:ss");
+        return format.format(this.createdDate);
     }
 
     @Override

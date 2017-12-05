@@ -23,6 +23,7 @@ public class InstagramMedia {
     String createdTime;
     String link;
     String message;
+    Date date;
 
     public InstagramMedia(String userName, String imageUri, String createdTime, String link) {
         this.userName = userName;
@@ -50,7 +51,7 @@ public class InstagramMedia {
     public String toDateFormat(String time){
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd aa hh:mm:ss");
 
-        Date date = new Date(Long.parseLong(time)*1000);
+        date = new Date(Long.parseLong(time)*1000);
         return sf.format(date);
     }
 
