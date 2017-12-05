@@ -2,11 +2,13 @@ package kr.jnu.embedded.snssearcher.data;
 
 import android.media.Image;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import kr.jnu.embedded.snssearcher.base.App;
 import kr.jnu.embedded.snssearcher.base.Item;
@@ -27,8 +29,10 @@ public class FacebookPagePost implements Comparable<FacebookPagePost>{
             this.message = jsonObject.get("message").toString();
             String createdTime = jsonObject.get("created_time").toString();
             this.createdTime = toDateFormat(createdTime);
+            if(this.getCreatedDate() == null) Log.d("FBMSG", "NULL");
+            else Log.d("FBMSG", this.getCreatedDate().toString());
         } catch (Exception e ) {
-
+            e.printStackTrace();
         }
     }
 
@@ -37,13 +41,13 @@ public class FacebookPagePost implements Comparable<FacebookPagePost>{
         return message;
     }
     private String toDateFormat(String time){
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss+SSSS");
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+SSSS", Locale.KOREA);
         try {
             this.createdDate = sf.parse(time);
         } catch(Exception e){
             e.printStackTrace();
         }
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd aa hh:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd aa hh:mm:ss", Locale.KOREA);
         return format.format(this.createdDate);
     }
 

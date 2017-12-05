@@ -87,7 +87,7 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
 
                 if(list == null) return;
 
-                Collections.sort(list);
+                Collections.sort(list, Collections.<FacebookPagePost>reverseOrder());
                 resultPost.addAll(list);
 
                 for(Object item : resultPost){

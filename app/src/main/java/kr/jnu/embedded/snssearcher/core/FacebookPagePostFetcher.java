@@ -236,7 +236,11 @@ public class FacebookPagePostFetcher {
                 FacebookPage page = findPage(pid);
                 for(int i=0; i<posts.length();i++){
                     FacebookPagePost post = new FacebookPagePost(page, posts.getJSONObject(i));
-                    if(post.getCreatedDate() == null) continue;
+
+                    if(post.getCreatedDate() == null) {
+                        Log.d(TAG, "Post Date is null.");
+                        continue;
+                    }
                     posts_final.add(post);
                 }
             }

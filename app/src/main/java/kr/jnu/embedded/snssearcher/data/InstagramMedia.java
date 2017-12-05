@@ -47,7 +47,6 @@ public class InstagramMedia implements Comparable<InstagramMedia>{
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
     public String toDateFormat(String time){
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd aa hh:mm:ss");

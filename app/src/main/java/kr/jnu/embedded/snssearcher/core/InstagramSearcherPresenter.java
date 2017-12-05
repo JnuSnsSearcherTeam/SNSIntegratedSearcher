@@ -47,7 +47,7 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
             Log.d(TAG, "hashtag list null");
             return;
         }
-        Collections.sort(list);
+        Collections.sort(list, Collections.<InstagramMedia>reverseOrder());
         result.addAll(list);
 
         for(Object item : result){
