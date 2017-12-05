@@ -46,6 +46,7 @@ public class InstagramSearcher {
     }
 
     public ArrayList<InstagramMedia> getHashTagMedia(String tagName){
+        if(tagName.equals("")) return new ArrayList<InstagramMedia>();
         Log.d(TAG, "getHashTagMedia called");
         String url = "https://api.instagram.com/v1/tags/{tag-name}/media/recent"
                 .replace("{tag-name}",tagName);

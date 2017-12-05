@@ -49,6 +49,7 @@ public class FacebookPostSearcher {
 
     private void searchString(String keyword){
         ArrayList<FacebookPagePost> toRemove = new ArrayList<>();
+        if(keyword.equals("")) return;
         if(posts == null) return;
 
         for(FacebookPagePost post : posts){

@@ -24,6 +24,7 @@ public class TwitterSearcher {
     public TwitterSearcher() {
         TwitterFactory tf = new TwitterFactory(App.getTwitterAccessToken());
         twitter = tf.getInstance();
+        result = new ArrayList<Object>();
     }
 
     public ArrayList<Object> getTwitterSearch() {
