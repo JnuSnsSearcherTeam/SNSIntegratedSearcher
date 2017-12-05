@@ -37,11 +37,4 @@ public class App extends Application {
         ImageLoader.getInstance().init(config);
     }
 
-    public static void setFaceBookAccessToken(AccessToken faceBookAccessToken) {
-        faceBookAccessToken = faceBookAccessToken;
-    }
-
-    public static void setInstagramAccessToken(String instagramAccessToken) {
-        instagramAccessToken = instagramAccessToken;
-    }
 }
