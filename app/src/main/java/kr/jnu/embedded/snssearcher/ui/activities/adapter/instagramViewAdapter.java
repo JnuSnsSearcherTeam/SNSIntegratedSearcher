@@ -15,10 +15,10 @@ import kr.jnu.embedded.snssearcher.R;
 import kr.jnu.embedded.snssearcher.base.Item;
 
 /**
- * Created by Shane on 2017. 12. 1..
+ * Created by shane on 2017. 12. 5..
  */
 
-public class viewAdapter extends RecyclerView
+public class instagramViewAdapter  extends RecyclerView
         .Adapter<viewAdapter
         .DataObjectHolder>
 {
@@ -39,31 +39,31 @@ public class viewAdapter extends RecyclerView
             datetext = (TextView) itemView.findViewById(R.id.date_text);
             texttext = (TextView) itemView.findViewById(R.id.text_text);
             userImageview = (ImageView) itemView.findViewById(R.id.imageView);
-//            textImageview = (ImageView) itemView.findViewById(R.id.imageView2);
+            textImageview = (ImageView) itemView.findViewById(R.id.imageView2);
         }
     }
 
-    public viewAdapter(List<Item> myDataset) {
+    public instagramViewAdapter(List<Item> myDataset) {
         mDataset = myDataset;
     }
 
     @Override
-    public DataObjectHolder onCreateViewHolder(ViewGroup parent,
-                                               int viewType) {
+    public viewAdapter.DataObjectHolder onCreateViewHolder(ViewGroup parent,
+                                                           int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item, parent, false);
+                .inflate(R.layout.list_item_instagram, parent, false);
 
-        DataObjectHolder dataObjectHolder = new DataObjectHolder(view);
+        viewAdapter.DataObjectHolder dataObjectHolder = new viewAdapter.DataObjectHolder(view);
         return dataObjectHolder;
     }
 
     @Override
-    public void onBindViewHolder(final DataObjectHolder holder, final int position) {
+    public void onBindViewHolder(final viewAdapter.DataObjectHolder holder, final int position) {
         holder.nametext.setText(mDataset.get(position).getName());
         holder.datetext.setText(mDataset.get(position).getDate());
         holder.texttext.setText(mDataset.get(position).getText());
         ImageLoader.getInstance().displayImage(mDataset.get(position).getUserImage(), holder.userImageview);
-//        ImageLoader.getInstance().displayImage(mDataset.get(position).getTextImage(), holder.textImageview);
+        ImageLoader.getInstance().displayImage(mDataset.get(position).getTextImage(), holder.textImageview);
 
     }
 
