@@ -1,0 +1,37 @@
+//package twitter_test1;
+
+
+
+import twitter4j.*;
+import twitter4j.auth.*;
+
+
+import java.util.List;
+
+
+
+
+
+public class test2323 {
+
+	public static void main(String ar[]) {
+	    try {
+	        AccessToken accesstoken = new AccessToken("371248481-HPdCXFq9gLtxsQOxkEgiCtP05KKxxm2jBE3fiNkl", "HKs41JAVeLySxGSFFiBvN6tVkEDbL5xgPVz69abBi6jTT");
+	        Twitter twitter = TwitterFactory.getSingleton();
+	        twitter.setOAuthConsumer("S3G06rqjHehNwvwor6qUQAlvh", "PUIrvsYvBxH8cweMlpIWlAY6tbilXkupg9NB97IzIa1383h0VA");
+	        twitter.setOAuthAccessToken(accesstoken);
+	        User user = twitter.verifyCredentials();
+	         
+	        List<Status> list = twitter.getUserTimeline(); 
+	        System.out.println("타임라인 계정:"+user.getScreenName());
+	        for(Status status : list) {
+	            System.out.println("작성자:"+status.getUser().getScreenName());
+	            System.out.println("타임라인내용:"+status.getText());
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+
+
+}
