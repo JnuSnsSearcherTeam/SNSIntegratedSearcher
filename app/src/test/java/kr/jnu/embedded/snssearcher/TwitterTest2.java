@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import kr.jnu.embedded.snssearcher.base.App;
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Status;
@@ -21,7 +22,7 @@ public class TwitterTest2 {
     @Test
     public void testAccessToken(){
 
-        TwitterFactory tf = new TwitterFactory(cb.build());
+        TwitterFactory tf = new TwitterFactory(App.getTwitterAccessToken());
         Twitter twitter = tf.getInstance();
 
         try {

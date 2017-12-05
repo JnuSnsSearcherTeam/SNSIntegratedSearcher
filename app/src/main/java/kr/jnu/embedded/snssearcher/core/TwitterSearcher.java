@@ -8,6 +8,7 @@ import kr.jnu.embedded.snssearcher.data.TwitterItem;
 public class TwitterSearcher {
     ArrayList<Object> result;
     String keyword;
+    Twitter
 
     public TwitterSearcher() {
     }
