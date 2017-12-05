@@ -1,0 +1,72 @@
+package twitter_test1;
+
+
+import twitter4j.*;
+import twitter4j.auth.*;
+
+
+
+import java.util.List;
+
+
+
+
+public class testing_1 {
+	
+
+
+	
+
+    public static void main(String[] args) {
+
+        if (args.length < 1) {
+
+            System.out.println("검색어 입력 요망");
+
+            System.exit(-1);
+
+        }
+
+        AccessToken accesstoken = new AccessToken("371248481-HPdCXFq9gLtxsQOxkEgiCtP05KKxxm2jBE3fiNkl", "HKs41JAVeLySxGSFFiBvN6tVkEDbL5xgPVz69abBi6jTT");
+        Twitter twitter = TwitterFactory.getSingleton();
+        twitter.setOAuthConsumer("S3G06rqjHehNwvwor6qUQAlvh", "PUIrvsYvBxH8cweMlpIWlAY6tbilXkupg9NB97IzIa1383h0VA");
+        twitter.setOAuthAccessToken(accesstoken);
+        //User user = twitter.verifyCredentials();
+        
+        twitter = new TwitterFactory().getInstance();
+
+        try {
+
+            Query query = new Query(args[0]);
+
+            QueryResult result;
+
+            do {
+
+                result = twitter.search(query);
+
+                List<Status> tweets = result.getTweets();
+
+                for (Status tweet : tweets) {
+
+                    System.out.println("##" + tweet.getUser().getScreenName() + " - " + tweet.getText());
+
+                }
+
+            } while ((query = result.nextQuery()) != null);
+
+            System.exit(0);
+
+        } catch (TwitterException te) {
+
+            te.printStackTrace();
+
+            System.out.println("Failed to search tweets: " + te.getMessage());
+
+            System.exit(-1);
+
+        }
+
+    }
+
+}
