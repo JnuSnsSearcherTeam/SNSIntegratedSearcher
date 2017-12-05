@@ -20,7 +20,7 @@ public class TwitterSearcherPresenter implements SNSSearcherContract.Presenter {
         twitterSearcher = new TwitterSearcher();
     }
 
-    private void setKeyword(String keyword){
+    public void setKeyword(String keyword){
         twitterSearcher.setKeyword(keyword);
     }
 

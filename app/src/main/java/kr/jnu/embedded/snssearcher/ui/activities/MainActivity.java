@@ -28,6 +28,7 @@ import kr.jnu.embedded.snssearcher.base.App;
 import kr.jnu.embedded.snssearcher.core.FacebookSearcherPresenter;
 import kr.jnu.embedded.snssearcher.core.InstagramSearcherPresenter;
 import kr.jnu.embedded.snssearcher.core.SNSSearcherContract;
+import kr.jnu.embedded.snssearcher.core.TwitterSearcherPresenter;
 import kr.jnu.embedded.snssearcher.ui.fragments.FaceBookFragment;
 import kr.jnu.embedded.snssearcher.ui.fragments.InstagramFragment;
 import kr.jnu.embedded.snssearcher.ui.fragments.TwitterFragment;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     FacebookSearcherPresenter facebookSearcherPresenter;
     InstagramSearcherPresenter instagramSearcherPresenter;
+    TwitterSearcherPresenter twitterSearcherPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         facebookSearcherPresenter = new FacebookSearcherPresenter();
         instagramSearcherPresenter = new InstagramSearcherPresenter();
+        twitterSearcherPresenter = new TwitterSearcherPresenter();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -83,8 +86,17 @@ public class MainActivity extends AppCompatActivity {
 
                 facebookSearcherPresenter.setKeyword(name);
                 instagramSearcherPresenter.setTag(name);
+                twitterSearcherPresenter.setKeyword(name);
 
                 facebookSearcherPresenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
+                    @Override
+                    public void onComplete(ArrayList<Object> result) {
+                        if (viewPager != null) {
+                            setupViewPager(viewPager);
+                        }
+                    }
+                });
+                twitterSearcherPresenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
                     @Override
                     public void onComplete(ArrayList<Object> result) {
                         if (viewPager != null) {
