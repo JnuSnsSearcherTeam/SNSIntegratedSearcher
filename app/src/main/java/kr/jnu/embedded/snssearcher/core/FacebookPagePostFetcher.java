@@ -2,6 +2,7 @@ package kr.jnu.embedded.snssearcher.core;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -15,7 +16,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
+import kr.jnu.embedded.snssearcher.base.App;
+import kr.jnu.embedded.snssearcher.data.FacebookPage;
 import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
+import kr.jnu.embedded.snssearcher.data.FacebookPostMetadata;
 
 /**
  * Created by KANG on 2017-12-01.
@@ -24,31 +28,45 @@ import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
 public class FacebookPagePostFetcher {
     private static final String TAG = "FacebookPostFetcher";
     private AccessToken accessToken;
-    private Callable onFetchComplete;
 
     private ArrayList<JSONObject> idArray = new ArrayList<>();
     private ArrayList<String> pageArray = new ArrayList<>();
-    private ArrayList<FacebookPagePost> resultArray;
 
+    private ArrayList<FacebookPage> pages_final = new ArrayList<>();
+    private ArrayList<FacebookPagePost> posts_final = new ArrayList<>();
+
+    private OnCompleteListener listener;
 
     private boolean isRequestAllSent;
     private int requestId = 0;
 
-    public FacebookPagePostFetcher(AccessToken accessToken, ArrayList<FacebookPagePost> resultArray) {
+    public interface OnCompleteListener{
+        void onComplete(ArrayList<FacebookPage> pages, ArrayList<FacebookPagePost> postArray);
+    }
+
+    public FacebookPagePostFetcher(AccessToken accessToken, OnCompleteListener listener) {
         this.accessToken = accessToken;
-        this.resultArray = resultArray;
+        this.listener = listener;
     }
 
-    public void onResult(Callable callable){
-        this.onFetchComplete = callable;
-    }
-
+    // 포스트 가져오기 시작.
     public void start(){
         startGetPageCandidates();
     }
+    // 포스트 가져오기 완료
+    private void complete(){
+        listener.onComplete(pages_final, posts_final);
+    }
 
+    /* 1. 페이지 정보를 가져올 페이스북 ID 탐색.
+     * Friend list:{"name":"강성원","id":"1493353087439584"}
+     * Facebook IDs: [{"name":"강성원","id":"1493353087439584"}]
+     */
     private void startGetPageCandidates(){
         Log.d(TAG,"Access Token : " + accessToken);
+        if(accessToken == null){
+            return;
+        }
 
         GraphRequest friendRequest = GraphRequest.newMeRequest(
                 accessToken,
@@ -78,6 +96,9 @@ public class FacebookPagePostFetcher {
         batch.executeAsync();
     }
 
+    /* 2. 좋아하는 페이지 정보를 가져옴.
+     * Page IDs: [1906427612917982, 473895302976120, 229312883921077...]
+     */
     private void getPageIdFromLikes(){
         ArrayList<GraphRequest> requests = new ArrayList<>();
         GraphRequest userRequest = GraphRequest.newMeRequest(
@@ -125,11 +146,15 @@ public class FacebookPagePostFetcher {
             @Override
             public void onBatchCompleted(GraphRequestBatch batch) {
                 Log.d(TAG, "Page IDs: " + getPageArray());
+                getPageInfo();
                 getFeedsFromPageArray();
             }
         });
         batch.executeAsync();
     }
+    /* 3. 페이지 정보에서 피드를 가져옴.
+    Graph Path :feed?limit=5&field=message&ids=1906427612917982,473895302976120,229312883921077,1443343142578555,1827931790805741,179511488728774
+     */
     private void getFeedsFromPageArray(){
         StringBuffer pages = new StringBuffer();
         int count = 0;
@@ -148,9 +173,29 @@ public class FacebookPagePostFetcher {
         isRequestAllSent = true;
     }
 
+    private void getPageInfo(){
+        GraphRequestBatch batch = new GraphRequestBatch();
+        for(String pid : pageArray){
+            batch.add(GraphRequest.newGraphPathRequest(
+                    accessToken,
+                    pid + "?fields=name,picture"
+                    , new GraphRequest.Callback() {
+                        @Override
+                        public void onCompleted(GraphResponse response) {
+                            if(response.getError() != null) {
+                                Log.d(TAG, "[getPageInfo] Error occured : " + response.getError());
+                                return;
+                            }
+                            FacebookPage page = new FacebookPage(response.getJSONObject());
+                            Log.d(TAG,"Page Info : " + page);
+                            pages_final.add(page);
+                        }
+                    }));
+        }
+        batch.executeAsync();
+    }
 
-
-    private void sendPageFeedRequest(final int requestId, String pids){
+    private void sendPageFeedRequest(final int requestId, final String pids){
         GraphRequest request = GraphRequest.newGraphPathRequest(
                 accessToken,
                 "feed?limit=5&field=message&ids=" + pids
@@ -158,14 +203,12 @@ public class FacebookPagePostFetcher {
                     @Override
                     public void onCompleted(GraphResponse response) {
                         if(response.getError() != null) Log.d(TAG, "id likes error:" + response.getError());
-                        addPage(response.getJSONObject());
-                        Log.d(TAG, "Pages : " + response.getJSONObject());
+                        Log.d(TAG, "Posts : " + response.getJSONObject());
+                        parseMetadata(pids.split(","), response.getJSONObject());
+
                         if(isRequestAllSent() && requestId == getRequestId()){
                             Log.d(TAG,"All request Completed.");
-                            try {
-                                onFetchComplete.call();
-                            } catch(Exception e){
-                            }
+                            complete();
                         }
                     }
                 }
@@ -175,6 +218,40 @@ public class FacebookPagePostFetcher {
 
         request.executeAsync();
     }
+    private void parseMetadata(String[] pids, JSONObject response){
+        ArrayList<FacebookPostMetadata> metadatas = new ArrayList<>();
+        Log.d(TAG, "PIDS : " + pids.toString());
+        try {
+            for (String pid : pids) {
+                Log.d(TAG, "pid: " + pid);
+                JSONObject data = response.getJSONObject(pid);
+                FacebookPostMetadata metadata = new FacebookPostMetadata(data, pid);
+                metadatas.add(metadata);
+                Log.d(TAG, "metadata: " + metadata.toString());
+                JSONArray posts = metadata.getData();
+                if(posts == null){
+                    Log.d(TAG, "post is null ");
+                    continue;
+                }
+                FacebookPage page = findPage(pid);
+                for(int i=0; i<posts.length();i++){
+                    posts_final.add(new FacebookPagePost(page, posts.getJSONObject(i)));
+                }
+            }
+        }catch(JSONException e){
+
+        }
+        Log.d(TAG, "Parsed metadata : " + metadatas);
+    }
+
+    private FacebookPage findPage(String pid) {
+        for(FacebookPage page : pages_final){
+            if(page.getID().equals(pid)) return page;
+        }
+        Log.d(TAG, "Null occured: " + pid);
+        return null;
+    }
+
 
     private int getRequestId() {
         return requestId;

@@ -1,103 +1,90 @@
 package kr.jnu.embedded.snssearcher.ui.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ImageButton;
 
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
+import java.util.Arrays;
 
 import kr.jnu.embedded.snssearcher.R;
-import kr.jnu.embedded.snssearcher.core.FacebookSearcherPresenter;
-import kr.jnu.embedded.snssearcher.core.SNSSearcherContract;
-import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
+import kr.jnu.embedded.snssearcher.base.App;
+import kr.jnu.embedded.snssearcher.core.InstagramLoginManager;
 
 public class FacebookLoginActivity extends AppCompatActivity {
-    CallbackManager callbackManager;
-    LoginButton loginButton;
-    ResultView resultView;
-
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_facebook_login);
-        resultView = new ResultView();
-        Button button = findViewById(R.id.refreshButton);
+        ImageButton facebookButton = findViewById(R.id.facebookButton);
+        Button instagramButton = findViewById(R.id.instagramButton);
+        Button checkButton = findViewById(R.id.checkAccessToken);
 
-        FacebookSearcherPresenter facebookSearcher = new FacebookSearcherPresenter();
-        resultView.setPresenter(facebookSearcher);
+        toolbar = (Toolbar) findViewById(R.id.toolbar1);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        callbackManager = CallbackManager.Factory.create();
-        loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email, user_likes, user_friends");
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                resultView.updateItem();
-            }
-
-            @Override
-            public void onCancel() {
-                // App code
-            }
-
-            @Override
-            public void onError(FacebookException exception) {
-                // App code
-            }
-        });
-        button.setOnClickListener(new View.OnClickListener() {
+        facebookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                resultView.updateItem();
+                facebookLogin();
+            }
+        });
+        instagramButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                instaLogin();
+            }
+        });
+        checkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("Activity","Instagram: " + App.instagramAccessToken);
+                Log.d("Activity","facebook" + AccessToken.getCurrentAccessToken());
             }
         });
 
-        resultView.updateItem();
+    }
+    private void facebookLogin(){
+        LoginManager.getInstance().logInWithReadPermissions(this,
+                Arrays.asList("email, user_likes, user_friends"));
+    }
+    private void instaLogin(){
+        InstagramLoginManager loginManager = InstagramLoginManager.getInstance(this);
+        loginManager.showLoginDialog();
     }
 
     @Override
+    /*페이스북 관련 액티비티에 필요*/
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode,resultCode, data);
     }
 
-    public class ResultView implements SNSSearcherContract.View{
-        SNSSearcherContract.Presenter presenter;
-        TextView textView;
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(FacebookLoginActivity.this , MainActivity.class));
+        finish();
+    }
 
-        public ResultView() {
-            textView = (TextView) findViewById(R.id.resultView);
-        }
-
-        @Override
-        public void setPresenter(SNSSearcherContract.Presenter presenter) {
-            this.presenter = presenter;
-        }
-
-        @Override
-        public void updateItem() {
-            presenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
-                @Override
-                public void onComplete(ArrayList<FacebookPagePost> result) {
-                    textView.setText(result.toString());
-                }
-            });
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }
