@@ -14,15 +14,17 @@ import java.util.List;
 import kr.jnu.embedded.snssearcher.R;
 import kr.jnu.embedded.snssearcher.base.App;
 import kr.jnu.embedded.snssearcher.base.Item;
+import kr.jnu.embedded.snssearcher.core.SNSSearcherContract;
 import kr.jnu.embedded.snssearcher.ui.activities.adapter.viewAdapter;
 
 /**
  * Created by shane on 2017. 12. 3..
  */
 
-public class TwitterFragment extends Fragment {
+public class TwitterFragment extends Fragment implements SNSSearcherContract.View{
     List<Item> items = App.twitterItem;
     protected viewAdapter adapter;
+    SNSSearcherContract.Presenter presenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,5 +42,16 @@ public class TwitterFragment extends Fragment {
         rv.setAdapter(adapter);
 
         return rv;
+    }
+
+    @Override
+    public void setPresenter(SNSSearcherContract.Presenter presenter) {
+        this.presenter = presenter;
+        presenter.setView(this);
+    }
+
+    @Override
+    public void updateItem() {
+        adapter.notifyDataSetChanged();
     }
 }

@@ -34,7 +34,6 @@ import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
 public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter {
     public static final String TAG = "FacebookSearcher";
     FacebookPostSearcher facebookPostSearcher;
-    SNSSearcherContract.LoadCompleteListner listener;
     ArrayList<Object> resultPost;
     String keyword;
 
@@ -65,10 +64,11 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
     }
 
     @Override
-    public void loadItem(final SNSSearcherContract.LoadCompleteListner listener) {
-        this.listener = listener;
+    public void loadItem() {
         fetchProcess();
+        view.updateItem();
     }
+
     public void fetchProcess(){
 
         final FacebookPagePostFetcher facebookPagePostFetcher = new FacebookPagePostFetcher(accessToken
@@ -92,8 +92,6 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
                     if(toAdd != null) App.facebookItem.add(toAdd);
 
                 }
-
-                listener.onComplete(resultPost);
             }
         });
 

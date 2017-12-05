@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     ImageButton imageButton;
     String name;
 
+    ViewPagerAdapter adapter;
+
     FacebookSearcherPresenter facebookSearcherPresenter;
     InstagramSearcherPresenter instagramSearcherPresenter;
     TwitterSearcherPresenter twitterSearcherPresenter;
@@ -73,10 +75,15 @@ public class MainActivity extends AppCompatActivity {
         fab.setClosedOnTouchOutside(true);
 
 
+
         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         editText = (EditText) findViewById(R.id.edittext1);
         imageButton = (ImageButton) findViewById(R.id.imageButton1);
+
+        if (viewPager != null) {
+            setupViewPager(viewPager);
+        }
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,40 +95,28 @@ public class MainActivity extends AppCompatActivity {
                 instagramSearcherPresenter.setTag(name);
                 twitterSearcherPresenter.setKeyword(name);
 
-                facebookSearcherPresenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
-                    @Override
-                    public void onComplete(ArrayList<Object> result) {
-                        if (viewPager != null) {
-                            setupViewPager(viewPager);
-                        }
-                    }
-                });
-                twitterSearcherPresenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
-                    @Override
-                    public void onComplete(ArrayList<Object> result) {
-                        if (viewPager != null) {
-                            setupViewPager(viewPager);
-                        }
-                    }
-                });
-                instagramSearcherPresenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
-                    @Override
-                    public void onComplete(ArrayList<Object> result) {
-                        if (viewPager != null) {
-                            setupViewPager(viewPager);
-                        }
-                    }
-                });
+                facebookSearcherPresenter.loadItem();
+                twitterSearcherPresenter.loadItem();
+                instagramSearcherPresenter.loadItem();
             }
         });
 
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new FaceBookFragment(), "Facebook");
-        adapter.addFragment(new TwitterFragment(), "Twitter");
-        adapter.addFragment(new InstagramFragment(), "Instagram");
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        FaceBookFragment fb = new FaceBookFragment();
+        fb.setPresenter(facebookSearcherPresenter);
+
+        TwitterFragment tf = new TwitterFragment();
+        tf.setPresenter(twitterSearcherPresenter);
+
+        InstagramFragment instagramFragment = new InstagramFragment();
+        instagramFragment.setPresenter(instagramSearcherPresenter);
+
+        adapter.addFragment(fb, "Facebook");
+        adapter.addFragment(tf, "Twitter");
+        adapter.addFragment(instagramFragment, "Instagram");
         viewPager.setAdapter(adapter);
     }
 

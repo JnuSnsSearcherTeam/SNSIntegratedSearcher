@@ -59,13 +59,7 @@ public class InstagramActivity extends AppCompatActivity {
         @Override
         public void updateItem() {
             Log.d (TAG,"updTeItem called.");
-                presenter.loadItem(new SNSSearcherContract.LoadCompleteListner() {
-                    @Override
-                    public void onComplete(ArrayList<Object> result) {
-                        Log.d (TAG,"Result: ");
-                        textView.setText(result.toString());
-                    }
-                });
+                presenter.loadItem();
         }
     }
 }

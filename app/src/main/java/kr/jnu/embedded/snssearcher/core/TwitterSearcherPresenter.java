@@ -25,7 +25,7 @@ public class TwitterSearcherPresenter implements SNSSearcherContract.Presenter {
     }
 
     @Override
-    public void loadItem(SNSSearcherContract.LoadCompleteListner listener) {
+    public void loadItem() {
         ArrayList<Object> result = new ArrayList<>();
         Log.d(TAG, "loadItem Called");
 
@@ -35,11 +35,11 @@ public class TwitterSearcherPresenter implements SNSSearcherContract.Presenter {
             App.twitterItem.add(((TwitterItem)item).toTwitterItem());
         }
 
-        listener.onComplete(result);
+        view.updateItem();
     }
 
     @Override
     public void setView(SNSSearcherContract.View view) {
-
+        this.view = view;
     }
 }

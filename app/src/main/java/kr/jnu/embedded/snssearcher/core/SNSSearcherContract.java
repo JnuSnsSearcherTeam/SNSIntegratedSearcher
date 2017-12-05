@@ -15,12 +15,9 @@ public interface SNSSearcherContract {
     }
 
     interface Presenter{
-        void loadItem(LoadCompleteListner listener);
+        void loadItem();
 
         void setView(View view);
     }
 
-    public interface LoadCompleteListner{
-        void onComplete(ArrayList<Object> result);
-    }
 }
