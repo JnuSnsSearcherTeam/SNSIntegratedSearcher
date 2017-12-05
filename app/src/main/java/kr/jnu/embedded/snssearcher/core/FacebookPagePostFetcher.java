@@ -235,7 +235,9 @@ public class FacebookPagePostFetcher {
                 }
                 FacebookPage page = findPage(pid);
                 for(int i=0; i<posts.length();i++){
-                    posts_final.add(new FacebookPagePost(page, posts.getJSONObject(i)));
+                    FacebookPagePost post = new FacebookPagePost(page, posts.getJSONObject(i));
+                    if(post.getCreatedDate() == null) continue;
+                    posts_final.add(post);
                 }
             }
         }catch(JSONException e){

@@ -9,6 +9,7 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import kr.jnu.embedded.snssearcher.base.App;
 import kr.jnu.embedded.snssearcher.data.InstagramMedia;
@@ -46,6 +47,7 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
             Log.d(TAG, "hashtag list null");
             return;
         }
+        Collections.sort(list);
         result.addAll(list);
 
         for(Object item : result){

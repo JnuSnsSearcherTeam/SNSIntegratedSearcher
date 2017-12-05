@@ -71,7 +71,9 @@ public class InstagramSearcher {
             ArrayList<InstagramMedia> medias = new ArrayList<>();
 
             for(int i=0; i<data.length();i++){
-                medias.add(new InstagramMedia(data.getJSONObject(i)));
+                InstagramMedia media = new InstagramMedia(data.getJSONObject(i));
+                if(media.getDate() == null) continue;
+                medias.add(media);
             }
             Log.d(TAG, "medias: " + medias);
             return medias;
