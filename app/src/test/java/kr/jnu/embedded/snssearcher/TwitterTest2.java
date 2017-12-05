@@ -20,12 +20,7 @@ import twitter4j.conf.ConfigurationBuilder;
 public class TwitterTest2 {
     @Test
     public void testAccessToken(){
-        ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true)
-                .setOAuthConsumerKey("S3G06rqjHehNwvwor6qUQAlvh")
-                .setOAuthConsumerSecret("PUIrvsYvBxH8cweMlpIWlAY6tbilXkupg9NB97IzIa1383h0VA")
-                .setOAuthAccessToken("371248481-HPdCXFq9gLtxsQOxkEgiCtP05KKxxm2jBE3fiNkl")
-                .setOAuthAccessTokenSecret("HKs41JAVeLySxGSFFiBvN6tVkEDbL5xgPVz69abBi6jTT");
+
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
 
