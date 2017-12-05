@@ -19,6 +19,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
 
@@ -84,13 +86,14 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
                 ArrayList<FacebookPagePost> list = facebookPostSearcher.getPosts();
 
                 if(list == null) return;
+
+                Collections.sort(list, Collections.<FacebookPagePost>reverseOrder());
                 resultPost.addAll(list);
 
                 for(Object item : resultPost){
                 //    Log.d(TAG, "Item Added: " + item.toString());
                     Item toAdd = ((FacebookPagePost)item).toFacebookItem();
                     if(toAdd != null) App.facebookItem.add(toAdd);
-
                 }
             }
         });

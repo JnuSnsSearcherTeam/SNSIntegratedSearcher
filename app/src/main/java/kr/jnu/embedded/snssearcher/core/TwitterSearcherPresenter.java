@@ -1,5 +1,6 @@
 package kr.jnu.embedded.snssearcher.core;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class TwitterSearcherPresenter implements SNSSearcherContract.Presenter {
         for(Object item : result){
             App.twitterItem.add(((TwitterItem)item).toTwitterItem());
         }
-
+        Log.d(TAG, "Twitter item loaded");
         view.updateItem();
     }
 
