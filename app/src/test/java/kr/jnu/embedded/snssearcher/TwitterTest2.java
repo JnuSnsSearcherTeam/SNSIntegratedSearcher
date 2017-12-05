@@ -38,6 +38,7 @@ public class TwitterTest2 {
 
                 List<Status> tweets = result.getTweets();
                 for (Status tweet : tweets) {
+                    System.out.println(tweet.toString());
                     System.out.println("##" + tweet.getUser().getScreenName() + " - " + tweet.getText());
                 }
 
