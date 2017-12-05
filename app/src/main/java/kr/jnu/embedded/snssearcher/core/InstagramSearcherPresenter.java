@@ -35,6 +35,7 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
     public void loadItem() {
         ArrayList<Object> result = new ArrayList<>();
         Log.d(TAG, "loaditem call");
+        App.instagramItem.clear();
 
         if(!isAccessTokenSet()){
             Log.d(TAG, "AccessToken is null");

@@ -28,6 +28,7 @@ public class TwitterSearcherPresenter implements SNSSearcherContract.Presenter {
     public void loadItem() {
         ArrayList<Object> result = new ArrayList<>();
         Log.d(TAG, "loadItem Called");
+        App.twitterItem.clear();
 
         result.addAll(twitterSearcher.getTwitterSearch());
 
