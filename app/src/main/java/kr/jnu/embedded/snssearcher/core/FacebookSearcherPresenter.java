@@ -37,7 +37,6 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
     SNSSearcherContract.LoadCompleteListner listener;
     ArrayList<Object> resultPost;
     String keyword;
-    private App application;
 
     private AccessToken accessToken;
 
