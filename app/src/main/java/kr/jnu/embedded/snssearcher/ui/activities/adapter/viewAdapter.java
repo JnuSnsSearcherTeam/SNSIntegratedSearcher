@@ -39,7 +39,7 @@ public class viewAdapter extends RecyclerView
             datetext = (TextView) itemView.findViewById(R.id.date_text);
             texttext = (TextView) itemView.findViewById(R.id.text_text);
             userImageview = (ImageView) itemView.findViewById(R.id.imageView);
-//            imageview = (ImageView) itemView.findViewById(R.id.avatar);
+            textImageview = (ImageView) itemView.findViewById(R.id.imageView2);
         }
     }
 
@@ -63,6 +63,7 @@ public class viewAdapter extends RecyclerView
         holder.datetext.setText(mDataset.get(position).getDate());
         holder.texttext.setText(mDataset.get(position).getText());
         ImageLoader.getInstance().displayImage(mDataset.get(position).getUserImage(), holder.userImageview);
+        ImageLoader.getInstance().displayImage(mDataset.get(position).getTextImage(), holder.textImageview);
 
     }
 

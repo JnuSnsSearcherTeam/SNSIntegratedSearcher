@@ -1,16 +1,16 @@
 package kr.jnu.embedded.snssearcher.ui.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.facebook.AccessToken;
-import com.facebook.AccessTokenManager;
-import com.facebook.AccessTokenTracker;
 import com.facebook.login.LoginManager;
 import java.util.Arrays;
 
@@ -19,14 +19,18 @@ import kr.jnu.embedded.snssearcher.base.App;
 import kr.jnu.embedded.snssearcher.core.InstagramLoginManager;
 
 public class FacebookLoginActivity extends AppCompatActivity {
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_facebook_login);
-        Button facebookButton = findViewById(R.id.facebookButton);
+        ImageButton facebookButton = findViewById(R.id.facebookButton);
         Button instagramButton = findViewById(R.id.instagramButton);
         Button checkButton = findViewById(R.id.checkAccessToken);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar1);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         facebookButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,4 +68,23 @@ public class FacebookLoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(FacebookLoginActivity.this , MainActivity.class));
+        finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
