@@ -10,12 +10,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -24,10 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.jnu.embedded.snssearcher.R;
-import kr.jnu.embedded.snssearcher.base.App;
 import kr.jnu.embedded.snssearcher.core.FacebookSearcherPresenter;
 import kr.jnu.embedded.snssearcher.core.InstagramSearcherPresenter;
-import kr.jnu.embedded.snssearcher.core.SNSSearcherContract;
 import kr.jnu.embedded.snssearcher.core.TwitterSearcherPresenter;
 import kr.jnu.embedded.snssearcher.ui.fragments.FaceBookFragment;
 import kr.jnu.embedded.snssearcher.ui.fragments.InstagramFragment;
@@ -95,9 +91,9 @@ public class MainActivity extends AppCompatActivity {
                 instagramSearcherPresenter.setTag(name);
                 twitterSearcherPresenter.setKeyword(name);
 
-                //facebookSearcherPresenter.loadItem();
+                facebookSearcherPresenter.loadItem();
                 twitterSearcherPresenter.loadItem();
-                //instagramSearcherPresenter.loadItem();
+                instagramSearcherPresenter.loadItem();
             }
         });
 

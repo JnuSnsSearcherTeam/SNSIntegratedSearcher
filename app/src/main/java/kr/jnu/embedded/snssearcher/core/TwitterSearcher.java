@@ -28,6 +28,7 @@ public class TwitterSearcher {
     }
 
     public ArrayList<Object> getTwitterSearch() {
+        Log.d(TAG, "Twitter Search Started!!");
         TwitterSearcherTask twitterSearcherTask
                 = new TwitterSearcherTask(twitter);
         twitterSearcherTask.execute(keyword);
