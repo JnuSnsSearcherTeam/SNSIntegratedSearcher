@@ -32,13 +32,12 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
     }
 
     @Override
-    public void loadItem(SNSSearcherContract.LoadCompleteListner listener) {
+    public void loadItem() {
         ArrayList<Object> result = new ArrayList<>();
         Log.d(TAG, "loaditem call");
 
         if(!isAccessTokenSet()){
             Log.d(TAG, "AccessToken is null");
-            listener.onComplete(null);
             return;
         }
 
@@ -53,7 +52,7 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
             App.instagramItem.add(((InstagramMedia)item).toInstagramItem());
         }
 
-        listener.onComplete(result);
+        view.updateItem();
     }
 
     @Override

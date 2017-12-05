@@ -15,15 +15,28 @@ import java.util.List;
 import kr.jnu.embedded.snssearcher.R;
 import kr.jnu.embedded.snssearcher.base.App;
 import kr.jnu.embedded.snssearcher.base.Item;
+import kr.jnu.embedded.snssearcher.core.SNSSearcherContract;
 import kr.jnu.embedded.snssearcher.ui.activities.adapter.viewAdapter;
 
 /**
  * Created by Shane on 2017. 12. 1..
  */
 
-public class FaceBookFragment extends Fragment {
+public class FaceBookFragment extends Fragment implements SNSSearcherContract.View{
     List<Item> items = App.facebookItem;
+    SNSSearcherContract.Presenter presenter;
     protected viewAdapter adapter;
+
+    @Override
+    public void setPresenter(SNSSearcherContract.Presenter presenter) {
+        this.presenter = presenter;
+        presenter.setView(this);
+    }
+
+    @Override
+    public void updateItem() {
+        adapter.notifyDataSetChanged();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
