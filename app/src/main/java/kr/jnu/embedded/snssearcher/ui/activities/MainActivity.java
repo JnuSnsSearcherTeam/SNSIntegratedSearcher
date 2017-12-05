@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        facebookSearcherPresenter = new FacebookSearcherPresenter(this);
-        instagramSearcherPresenter = new InstagramSearcherPresenter(this);
+        facebookSearcherPresenter = new FacebookSearcherPresenter();
+        instagramSearcherPresenter = new InstagramSearcherPresenter();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
