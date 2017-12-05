@@ -52,6 +52,7 @@ public class TwitterFragment extends Fragment implements SNSSearcherContract.Vie
 
     @Override
     public void updateItem() {
+        if(adapter == null) adapter = new viewAdapter(items);
         adapter.notifyDataSetChanged();
     }
 }
