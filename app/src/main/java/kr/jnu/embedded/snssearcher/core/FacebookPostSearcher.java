@@ -47,16 +47,9 @@ public class FacebookPostSearcher {
         return posts;
     }
 
-
-    private FacebookPage findPagebyId(String key, ArrayList<FacebookPage> pages){
-        for(FacebookPage page : pages){
-            if(page.getID().equals(key)) return page;
-        }
-        return null;
-    }
-
     private void searchString(String keyword){
         ArrayList<FacebookPagePost> toRemove = new ArrayList<>();
+        if(keyword.equals("")) return;
         if(posts == null) return;
 
         for(FacebookPagePost post : posts){

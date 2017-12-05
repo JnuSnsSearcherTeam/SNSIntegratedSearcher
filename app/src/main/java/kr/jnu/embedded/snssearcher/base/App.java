@@ -11,6 +11,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
+
 /**
  * Created by Shane on 2017. 12. 1..
  */
@@ -21,6 +24,7 @@ public class App extends Application {
     public final static List<Item> instagramItem = new ArrayList<>();
     public static AccessToken faceBookAccessToken;
     public static String instagramAccessToken;
+    public static Configuration twitterAccessToken;
     @Override
     public void onCreate(){
         super.onCreate();
@@ -37,11 +41,16 @@ public class App extends Application {
         ImageLoader.getInstance().init(config);
     }
 
-    public static void setFaceBookAccessToken(AccessToken faceBookAccessToken) {
-        faceBookAccessToken = faceBookAccessToken;
-    }
-
-    public static void setInstagramAccessToken(String instagramAccessToken) {
-        instagramAccessToken = instagramAccessToken;
+    public static Configuration getTwitterAccessToken() {
+        if(twitterAccessToken == null){
+            ConfigurationBuilder cb = new ConfigurationBuilder();
+            cb.setDebugEnabled(true)
+                    .setOAuthConsumerKey("S3G06rqjHehNwvwor6qUQAlvh")
+                    .setOAuthConsumerSecret("PUIrvsYvBxH8cweMlpIWlAY6tbilXkupg9NB97IzIa1383h0VA")
+                    .setOAuthAccessToken("371248481-HPdCXFq9gLtxsQOxkEgiCtP05KKxxm2jBE3fiNkl")
+                    .setOAuthAccessTokenSecret("HKs41JAVeLySxGSFFiBvN6tVkEDbL5xgPVz69abBi6jTT");
+            twitterAccessToken = cb.build();
+        }
+        return twitterAccessToken;
     }
 }

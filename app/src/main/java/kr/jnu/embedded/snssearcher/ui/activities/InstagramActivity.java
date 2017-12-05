@@ -29,7 +29,7 @@ public class InstagramActivity extends AppCompatActivity {
         setContentView(R.layout.activity_instagram);
         button = findViewById(R.id.instaButton);
 
-        presenter = new InstagramSearcherPresenter(this);
+        presenter = new InstagramSearcherPresenter();
         final ResultView resultView = new ResultView();
         resultView.setPresenter(presenter);
 
