@@ -95,9 +95,9 @@ public class MainActivity extends AppCompatActivity {
                 instagramSearcherPresenter.setTag(name);
                 twitterSearcherPresenter.setKeyword(name);
 
-                facebookSearcherPresenter.loadItem();
+                //facebookSearcherPresenter.loadItem();
                 twitterSearcherPresenter.loadItem();
-                instagramSearcherPresenter.loadItem();
+                //instagramSearcherPresenter.loadItem();
             }
         });
 
