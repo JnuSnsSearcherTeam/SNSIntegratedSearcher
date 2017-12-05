@@ -1,6 +1,7 @@
 package kr.jnu.embedded.snssearcher.data;
 
 import android.media.Image;
+import android.support.annotation.NonNull;
 
 import org.json.JSONObject;
 
@@ -14,7 +15,7 @@ import kr.jnu.embedded.snssearcher.base.Item;
  * Created by KANG on 2017-12-01.
  */
 
-public class FacebookPagePost {
+public class FacebookPagePost implements Comparable<FacebookPagePost>{
     FacebookPage page;
     String createdTime;
     String message;
@@ -60,5 +61,14 @@ public class FacebookPagePost {
         ,createdTime
         ,message
         ,"텍스트이미지");
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    @Override
+    public int compareTo(@NonNull FacebookPagePost facebookPagePost) {
+        return this.getCreatedDate().compareTo(facebookPagePost.getCreatedDate());
     }
 }

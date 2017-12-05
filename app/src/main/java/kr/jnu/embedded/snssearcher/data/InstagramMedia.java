@@ -1,6 +1,7 @@
 package kr.jnu.embedded.snssearcher.data;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -15,7 +16,7 @@ import kr.jnu.embedded.snssearcher.base.Item;
  * Created by KANG on 2017-12-04.
  */
 
-public class InstagramMedia {
+public class InstagramMedia implements Comparable<InstagramMedia>{
     String userName;
     String imageUri;
     String userProfile;
@@ -67,5 +68,14 @@ public class InstagramMedia {
                 ", createdTime='" + createdTime + '\'' +
                 ", link='" + link + '\'' +
                 '}';
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    @Override
+    public int compareTo(@NonNull InstagramMedia instagramMedia) {
+        return this.getDate().compareTo(instagramMedia.getDate());
     }
 }
