@@ -43,7 +43,7 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
 
     private SNSSearcherContract.View view;
 
-    public FacebookSearcherPresenter(Context context) {
+    public FacebookSearcherPresenter() {
         AccessTokenTracker accessTokenTracker;
 
         accessTokenTracker = new AccessTokenTracker() {

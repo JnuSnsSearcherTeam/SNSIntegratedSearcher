@@ -23,7 +23,7 @@ public class InstagramSearcherPresenter implements SNSSearcherContract.Presenter
     private String tag;
     private InstagramSearcher instagramSearcher;
 
-    public InstagramSearcherPresenter(Context context) {
+    public InstagramSearcherPresenter() {
         instagramSearcher = new InstagramSearcher();
     }
 
