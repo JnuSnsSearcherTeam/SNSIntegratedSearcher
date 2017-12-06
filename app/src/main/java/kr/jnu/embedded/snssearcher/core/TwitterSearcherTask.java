@@ -49,7 +49,7 @@ public class TwitterSearcherTask extends AsyncTask<String, Object, ArrayList<Obj
 
                     count++;
                     Log.d(TAG, "Count : " + count);
-                    if(count > 20){
+                    if(count > 14){
                         returnArray.addAll(result);
                         return returnArray;
                     }

@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Picture;
 import android.media.Image;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.facebook.AccessToken;
@@ -67,11 +69,22 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
 
     @Override
     public void loadItem() {
-        fetchProcess();
-        view.updateItem();
+        final Handler handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message message) {
+                view.updateItem();
+                return true;
+            }
+        });
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fetchProcess(handler);
+            }
+        }).start();
     }
 
-    public void fetchProcess(){
+    public void fetchProcess(final Handler handler){
 
         final FacebookPagePostFetcher facebookPagePostFetcher = new FacebookPagePostFetcher(accessToken
                 , new FacebookPagePostFetcher.OnCompleteListener() {
@@ -95,6 +108,8 @@ public class FacebookSearcherPresenter implements SNSSearcherContract.Presenter 
                     Item toAdd = ((FacebookPagePost)item).toFacebookItem();
                     if(toAdd != null) App.facebookItem.add(toAdd);
                 }
+
+                handler.sendMessage(new Message());
             }
         });
 
