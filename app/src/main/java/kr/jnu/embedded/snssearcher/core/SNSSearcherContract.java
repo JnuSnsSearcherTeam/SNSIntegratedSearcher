@@ -4,8 +4,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import kr.jnu.embedded.snssearcher.data.FacebookPagePost;
-
 /**
  * Created by KANG on 2017-11-22.
  */
@@ -17,12 +15,9 @@ public interface SNSSearcherContract {
     }
 
     interface Presenter{
-        void loadItem(LoadCompleteListner listener);
+        void loadItem();
 
         void setView(View view);
     }
 
-    public interface LoadCompleteListner{
-        void onComplete(ArrayList<FacebookPagePost> result);
-    }
 }

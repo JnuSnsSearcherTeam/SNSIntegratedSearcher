@@ -10,8 +10,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".core.ApplicationClass">
+        android:theme="@style/MyMaterialTheme"
+        android:name=".base.App">
+        android:theme="@style/AppTheme">
+      
         <activity android:name=".ui.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,7 +45,8 @@
         </activity>
         <!-- Facebook -->
 
-        <activity android:name=".ui.activities.FacebookLoginActivity"></activity>
+        <activity android:name=".ui.activities.FacebookLoginActivity" />
+        <activity android:name=".ui.activities.InstagramActivity"></activity>
     </application>
 
 </manifest>
