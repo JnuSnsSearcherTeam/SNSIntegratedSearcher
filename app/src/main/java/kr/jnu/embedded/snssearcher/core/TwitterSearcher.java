@@ -28,16 +28,26 @@ public class TwitterSearcher {
     }
 
     public ArrayList<Object> getTwitterSearch() {
-        Log.d(TAG, "Twitter Search Started!!");
-        TwitterSearcherTask twitterSearcherTask
-                = new TwitterSearcherTask(twitter);
-        twitterSearcherTask.execute(keyword);
-        try{
-            return twitterSearcherTask.get();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return new ArrayList<>();
+        
+        
+            Query query = new Query("test");
+            QueryResult results;
+
+            do {
+                results = twitter.search(query);
+
+                List<Status> tweets = results.getTweets();
+                for (Status tweet : tweets) {
+        result.add(new TwitterItem(tweet.getUser().getScreenName(),
+                                tweet.getUser().getBiggerProfileImageURL().toString(),
+                                tweet.getCreatedAt().toString(),
+                                tweet.getText()));
+                    
+                return result;
+                }
+
+            } while ((query = results.nextQuery()) != null);
+        
     }
 
     public void setKeyword(String keyword) {
