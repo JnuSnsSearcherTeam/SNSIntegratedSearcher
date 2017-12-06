@@ -1,6 +1,8 @@
 package kr.jnu.embedded.snssearcher.core;
 
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -27,18 +29,30 @@ public class TwitterSearcherPresenter implements SNSSearcherContract.Presenter {
 
     @Override
     public void loadItem() {
-        ArrayList<Object> result = new ArrayList<>();
-        Log.d(TAG, "loadItem Called");
+        final Handler handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message message) {
+                view.updateItem();
+                return true;
+            }
+        });
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<Object> result = new ArrayList<>();
+                Log.d(TAG, "loadItem Called");
 
-        result.addAll(twitterSearcher.getTwitterSearch());
+                result.addAll(twitterSearcher.getTwitterSearch());
 
-        for(Object item : result){
-            App.twitterItem.add(((TwitterItem)item).toTwitterItem());
-        }
-        Log.d(TAG, "Twitter item loaded");
-        view.updateItem();
+                for(Object item : result){
+                    App.twitterItem.add(((TwitterItem)item).toTwitterItem());
+                }
+                Log.d(TAG, "Twitter item loaded");
+                handler.sendMessage(new Message());
+
+            }
+        }).start();
     }
-
     @Override
     public void setView(SNSSearcherContract.View view) {
         this.view = view;
