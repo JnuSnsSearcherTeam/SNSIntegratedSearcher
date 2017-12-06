@@ -15,6 +15,7 @@ import kr.jnu.embedded.snssearcher.R;
 import kr.jnu.embedded.snssearcher.base.App;
 import kr.jnu.embedded.snssearcher.base.Item;
 import kr.jnu.embedded.snssearcher.core.SNSSearcherContract;
+import kr.jnu.embedded.snssearcher.ui.activities.adapter.instagramViewAdapter;
 import kr.jnu.embedded.snssearcher.ui.activities.adapter.viewAdapter;
 
 /**
@@ -23,7 +24,7 @@ import kr.jnu.embedded.snssearcher.ui.activities.adapter.viewAdapter;
 
 public class InstagramFragment extends Fragment implements SNSSearcherContract.View{
     List<Item> items = App.instagramItem;
-    protected viewAdapter adapter;
+    protected instagramViewAdapter adapter;
     SNSSearcherContract.Presenter presenter;
 
     @Override
@@ -34,7 +35,7 @@ public class InstagramFragment extends Fragment implements SNSSearcherContract.V
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        adapter = new viewAdapter(items);
+        adapter = new instagramViewAdapter(items);
 
         RecyclerView rv = (RecyclerView) inflater.inflate(
                 R.layout.fragment_instagram, container, false);
@@ -52,7 +53,7 @@ public class InstagramFragment extends Fragment implements SNSSearcherContract.V
 
     @Override
     public void updateItem() {
-        if(adapter == null) adapter = new viewAdapter(items);
+        if(adapter == null) adapter = new instagramViewAdapter(items);
         adapter.notifyDataSetChanged();
     }
 }

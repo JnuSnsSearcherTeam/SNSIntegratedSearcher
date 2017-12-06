@@ -27,18 +27,22 @@ public class TwitterTest2 {
 
         try {
             Query query = new Query("test");
-            QueryResult result;
+            QueryResult results;
 
             do {
-                result = twitter.search(query);
+                results = twitter.search(query);
 
-                List<Status> tweets = result.getTweets();
+                List<Status> tweets = results.getTweets();
                 for (Status tweet : tweets) {
-                    System.out.println(tweet.toString());
-                    System.out.println("##" + tweet.getUser().getScreenName() + " - " + tweet.getText());
+        result.add(new TwitterItem(tweet.getUser().getScreenName(),
+                                tweet.getUser().getBiggerProfileImageURL().toString(),
+                                tweet.getCreatedAt().toString(),
+                                tweet.getText()));
+                    
+                return result;
                 }
 
-            } while ((query = result.nextQuery()) != null);
+            } while ((query = results.nextQuery()) != null);
 
         } catch (TwitterException te) {
 
